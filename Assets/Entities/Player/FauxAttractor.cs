@@ -26,40 +26,38 @@ public class FauxAttractor : MonoBehaviour
 
     private void Update()
     {
-        //print(currentSurface.name);
         var pos = transform.position;
         var upAxisIndex = comps.entityStats.upAxis.index;
         var verticalRotationAxis = upAxisIndex == 0 ? 2 : upAxisIndex - 1;
         var raycastStart = pos;
         raycastStart[upAxisIndex] -= 0.5f;
-        Debug.DrawRay(raycastStart, Quaternion.Euler(transform.right * 30) * (transform.forward * 3), Color.red);
+        //Debug.DrawRay(raycastStart, Quaternion.Euler(transform.right * 30) * (transform.forward * 3), Color.red);
         if (Physics.Raycast(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, out newHit, 1f) && newHit.transform.gameObject != currentSurface.gameObject)
         {
-            var tag = newHit.transform.tag;
-            if (tag.Equals(Tags.WALL) || tag.Equals(Tags.GROUND))
+            if (newHit.transform.tag.Equals(Tags.WALL))
             {
-                onWall = tag.Equals(Tags.WALL);
+                onWall = true;
                 currentSurface = newHit.transform;
                 comps.entityStats.groundUp = newHit.normal;
             }
         }
-        //else
-        //{
-        //    raycastStart = cornerDetector.position;
-        //    var forwardAxis = MoveAxis.AXES.First(x => transform.forward[x] != 0);
-        //    Debug.DrawRay(raycastStart, Quaternion.Euler(transform.right * 50) * -transform.up * 1f, Color.magenta);    // show floor check ray
-        //    if (Physics.Raycast(raycastStart, Quaternion.Euler(transform.right * 50) * -transform.up, out newHit, 1f) && newHit.transform.gameObject == currentSurface.gameObject
-        //        && newHit.normal != comps.entityStats.groundUp)
-        //    {
-        //        Debug.Log("HitNormal " + newHit.transform.gameObject);
-        //        currentSurface = newHit.transform;
-        //        comps.entityStats.groundUp = newHit.normal;
-        //    }
-        //}
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.collider.tag.Equals(Tags.GROUND))
+        {
+            var normal = collision.contacts[0].normal;
+            var angle = Vector3.Angle(normal, transform.forward);
+            print($"{normal}, {angle}");
+            if(normal.y > 0 && Mathf.Approximately(angle, 90))
+            {
+                onWall = false;
+                currentSurface = collision.transform;
+                comps.entityStats.groundUp = EntityStats.defaultGroundUp;
+            }
+
+        }
         if(enabled && (collision.collider.tag.Equals(Tags.GROUND) || collision.collider.tag.Equals(Tags.WALL)))
         {
             var rot = Vector3.zero;
@@ -72,9 +70,11 @@ public class FauxAttractor : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (enabled && (collision.collider.tag.Equals(Tags.WALL) && (comps.entityJump == null || !comps.entityJump.jumped)))
+        if (collision.gameObject.Equals(currentSurface.gameObject) && (collision.collider.tag.Equals(Tags.WALL) && (comps.entityJump == null || !comps.entityJump.jumped)))
         {
-            CancelCustomGravity(false);
+            print("exit wall");
+            comps.rigidbody.velocity = Vector3.zero;
+            comps.playerInput.CancelSprint();
         }
     }
 

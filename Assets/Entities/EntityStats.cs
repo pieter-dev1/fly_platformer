@@ -12,6 +12,7 @@ public class EntityStats : MonoBehaviour
     public EntityMeter meter;
     public List<string> blocks = new List<string>();
 
+    public static readonly Vector3 defaultGroundUp = new Vector3(0, 1, 0);
     private Vector3 groundUpBackUp;
     [HideInInspector]
     public (Transform surface, Vector3 groundUp) lastSurface = (null, Vector3.zero);
@@ -41,7 +42,7 @@ public class EntityStats : MonoBehaviour
     private void Awake()
     {
         meter = new EntityMeter();
-        groundUp = new Vector3(0, 1, 0);
+        groundUp = defaultGroundUp;
         meter.visualMeter = GameObject.Find("SprintMeter").transform;
         meter.currMeter = meter.maxMeter;
     }

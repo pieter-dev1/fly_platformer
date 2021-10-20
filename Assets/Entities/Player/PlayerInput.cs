@@ -77,7 +77,7 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    private void CancelSprint()
+    public void CancelSprint()
     {
         comps.entityStats.blocks.Remove(Blocks.MOVE);
         comps.entityStats.meter.currUsing = false;
