@@ -49,7 +49,6 @@ public class FauxAttractor : MonoBehaviour
         {
             var normal = collision.contacts[0].normal;
             var angle = Vector3.Angle(normal, transform.forward);
-            print($"{normal}, {angle}");
             if(normal.y > 0 && Mathf.Approximately(angle, 90))
             {
                 onWall = false;
@@ -72,7 +71,6 @@ public class FauxAttractor : MonoBehaviour
     {
         if (collision.gameObject.Equals(currentSurface.gameObject) && (collision.collider.tag.Equals(Tags.WALL) && (comps.entityJump == null || !comps.entityJump.jumped)))
         {
-            print("exit wall");
             comps.rigidbody.velocity = Vector3.zero;
             comps.playerInput.CancelSprint();
         }

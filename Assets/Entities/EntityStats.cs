@@ -56,4 +56,5 @@ public class EntityStats : MonoBehaviour
     {
         meter.ManageMeter();
     }
+
 }
