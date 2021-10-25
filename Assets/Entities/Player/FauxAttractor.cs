@@ -45,7 +45,7 @@ public class FauxAttractor : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag.Equals(Tags.GROUND))
+        if (collision.collider.gameObject.layer.Equals(Layers.GROUND))
         {
             var normal = collision.contacts[0].normal;
             var angle = Vector3.Angle(normal, transform.forward);
@@ -57,7 +57,7 @@ public class FauxAttractor : MonoBehaviour
             }
 
         }
-        if(enabled && (collision.collider.tag.Equals(Tags.GROUND) || collision.collider.tag.Equals(Tags.WALL)))
+        if(enabled && (collision.collider.gameObject.layer.Equals(Layers.GROUND) || collision.collider.tag.Equals(Tags.WALL)))
         {
             var rot = Vector3.zero;
             if (comps.entityStats.upAxis.index != MoveAxis.VERTICAL)

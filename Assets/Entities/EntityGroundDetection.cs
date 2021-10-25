@@ -9,7 +9,7 @@ public class EntityGroundDetection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == Tags.GROUND || other.tag == Tags.WALL)
+        if (other.gameObject.layer.Equals(Layers.GROUND) || other.tag == Tags.WALL)
         {
             comps.entityStats.grounded = true;
             comps.entityJump.jumped = false;
@@ -19,7 +19,7 @@ public class EntityGroundDetection : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == Tags.GROUND || other.tag == Tags.WALL)
+        if (other.gameObject.layer.Equals(Layers.GROUND) || other.tag == Tags.WALL)
             comps.entityStats.grounded = false;
     }
 }
