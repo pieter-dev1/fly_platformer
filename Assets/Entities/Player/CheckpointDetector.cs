@@ -14,7 +14,6 @@ public class CheckpointDetector : MonoBehaviour
             Challenge.startPoint = transform.position;
             var meter = other.GetComponent<EntityComponents>().entityStats.meter;
             meter.FillMeter(meter.maxMeter);
-            SetTimer.SetTime();
             //foreach (var zone in zonesToDisable)
             //    zone.SetActive(false);
             gameObject.SetActive(false);
