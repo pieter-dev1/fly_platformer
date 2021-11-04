@@ -13,6 +13,7 @@ public class EntityMovement : MonoBehaviour
     [HideInInspector]
     public Vector2 direction;
     private readonly float gravity = -80;
+    public bool allowRot = true;
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +55,8 @@ public class EntityMovement : MonoBehaviour
             }
 
             var movement = (vector) * Time.deltaTime * (moveSpeed * comps.entityStats.moveSpeedRatio);
-            transform.rotation = Quaternion.LookRotation(movement, comps.entityStats.groundUp); //rotation
+            if(allowRot)
+                transform.rotation = Quaternion.LookRotation(movement, comps.entityStats.groundUp); //rotation
 
             //apply vertical force (f.e. jumpforce or gravity)
             movement[groundUpAxisIndex] = comps.rigidbody.velocity[groundUpAxisIndex];
@@ -82,7 +84,8 @@ public class EntityMovement : MonoBehaviour
         //    }
         //}
         //else
-         comps.rigidbody.AddForce(comps.entityStats.groundUp * gravity);
+        comps.rigidbody.AddForce(comps.entityStats.groundUp * gravity);
+        //comps.rigidbody.AddForce(new Vector3(-0.9f, 0.3f, 0) * gravity);
     }
 
     public void CancelMovement()
