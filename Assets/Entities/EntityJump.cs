@@ -25,7 +25,6 @@ public class EntityJump : MonoBehaviour
             comps.fauxAttractor.CancelCustomGravity(false);
             comps.entityMovement.Move(new Vector2(0.1f, 0));
             comps.entityStats.blocks.Add(Blocks.MOVE);
-            //gameObject.ExecuteEffects(gameObject, true, comps.entityStats.meter.undoEffects);
             comps.rigidbody.AddForce(groundUp * (jumpForce * wallJumpRatio));
         }
         else

@@ -31,7 +31,6 @@ public class FauxAttractor : MonoBehaviour
         var verticalRotationAxis = upAxisIndex == 0 ? 2 : upAxisIndex - 1;
         var raycastStart = pos;
         raycastStart[upAxisIndex] -= 0.5f;
-        Debug.DrawRay(transform.position, Vector3.down, Color.red, 1);
         RaycastHit t;
         if (Physics.Raycast(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, out newHit, 1f) && (newHit.transform.gameObject != currentSurface.gameObject || !comps.entityMovement.allowRot))
         {
@@ -42,20 +41,22 @@ public class FauxAttractor : MonoBehaviour
                 comps.entityStats.groundUp = newHit.normal;
             }
         }
-        else if (Physics.Raycast(transform.position, -transform.up, out newHit) && comps.entityStats.groundUp != newHit.normal)
-        {
-            if (newHit.transform.tag.Equals(Tags.WALL))
-            {
-                print("haaiii");
-                onWall = true;
-                currentSurface = newHit.transform;
-                comps.entityStats.groundUp = newHit.normal;
-                print(comps.entityStats.groundUp);
-                var rot = transform.rotation.eulerAngles;
-                rot[comps.entityStats.upAxis.index] = 45;
-                transform.rotation = Quaternion.LookRotation(rot, comps.entityStats.groundUp);
-            }
-        }
+
+        //WALKING AROUND CORNER NEEDS ADDITIONAL TESTING
+        //else if (Physics.Raycast(transform.position, -transform.up, out newHit) && comps.entityStats.groundUp != newHit.normal)
+        //{
+        //    if (newHit.transform.tag.Equals(Tags.WALL))
+        //    {
+        //        print("haaiii");
+        //        onWall = true;
+        //        currentSurface = newHit.transform;
+        //        comps.entityStats.groundUp = newHit.normal;
+        //        print(comps.entityStats.groundUp);
+        //        var rot = transform.rotation.eulerAngles;
+        //        rot[comps.entityStats.upAxis.index] = 45;
+        //        transform.rotation = Quaternion.LookRotation(rot, comps.entityStats.groundUp);
+        //    }
+        //}
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -74,7 +75,6 @@ public class FauxAttractor : MonoBehaviour
         }
         if(enabled && (collision.collider.gameObject.layer.Equals(Layers.GROUND) || collision.collider.tag.Equals(Tags.WALL)))
         {
-            print("wall collide");
             var rot = Vector3.zero;
             if (comps.entityStats.upAxis.index != MoveAxis.VERTICAL)
                 rot[comps.entityStats.horAxis] = -90;
@@ -87,13 +87,13 @@ public class FauxAttractor : MonoBehaviour
     {
         if (collision.gameObject.Equals(currentSurface.gameObject))
         {
-            comps.entityMovement.allowRot = true;
+            //WHEN WALKING AROUND CORNERS ENABLED
+            //comps.entityMovement.allowRot = true;
             if((collision.collider.tag.Equals(Tags.WALL) && (comps.entityJump == null || !comps.entityJump.jumped)))
             {
-
+                comps.rigidbody.velocity = Vector3.zero;
+                comps.playerInput.CancelSprint();
             }
-            //comps.rigidbody.velocity = Vector3.zero;
-            //comps.playerInput.CancelSprint();
         }
     }
 

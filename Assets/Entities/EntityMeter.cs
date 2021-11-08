@@ -20,6 +20,7 @@ public class EntityMeter : MonoBehaviour
     public List<(Component script, string variable, object value)> triggerConditionsInfo = new List<(Component script, string variable, object value)>();
     public List<(Component script, FieldInfo variable, object conditionValue)> triggerConditions { get; private set; }
     private bool TriggerConditionsMet() => triggerConditions.All(x => x.variable.GetValue(x.script).GetHashCode() == x.conditionValue.GetHashCode());
+    //WHEN THERE'S MULTIPLE METERS
     //private bool TriggerConditionsMet() {
     //    foreach (var c in triggerConditions)
     //    {

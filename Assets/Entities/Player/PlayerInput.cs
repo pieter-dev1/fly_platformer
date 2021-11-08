@@ -33,12 +33,6 @@ public class PlayerInput : MonoBehaviour
         controls.move.performed += ctx => comps.entityMovement.direction = ctx.ReadValue<Vector2>();
         controls.move.canceled += _ => { comps.entityMovement.CancelMovement(); };
 
-        //controls.enableLook.started += _ => { controls.look.Enable(); enableLookButtonsPressed++; };
-        //controls.enableLook.canceled += _ => ReleaseLookButton();
-
-        //controls.axisLook.started += _ => { controls.look.Enable(); enableLookButtonsPressed++; };
-        //controls.axisLook.canceled += _ => ReleaseLookButton();
-
         //pressedJump tracks if the jump input has succesfully come through. With this it can be forced that the jumpcancel input only comes through on the actual jump
         //(the first time you press the button). This means every press (jumpcancel) after (whem youre in the air) will not come through, which prevents a bug
         //where you would stop falling a brief moment even though you were already falling from your jump.

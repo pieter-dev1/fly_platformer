@@ -66,6 +66,7 @@ public class EntityMovement : MonoBehaviour
 
     private void ApplyGravity()
     {
+        //WALKING AROUND CORNERS ALTERNATIVE
         //if (!comps.entityStats.grounded && comps.fauxAttractor != null && comps.fauxAttractor.enabled)
         //{
         //    RaycastHit hit;
@@ -85,7 +86,6 @@ public class EntityMovement : MonoBehaviour
         //}
         //else
         comps.rigidbody.AddForce(comps.entityStats.groundUp * gravity);
-        //comps.rigidbody.AddForce(new Vector3(-0.9f, 0.3f, 0) * gravity);
     }
 
     public void CancelMovement()
