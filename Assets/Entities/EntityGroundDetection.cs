@@ -20,6 +20,8 @@ public class EntityGroundDetection : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.layer.Equals(Layers.GROUND) || other.tag == Tags.WALL)
+        {
             comps.entityStats.grounded = false;
+        }
     }
 }

@@ -37,7 +37,8 @@ public class PlayerInput : MonoBehaviour
         //(the first time you press the button). This means every press (jumpcancel) after (whem youre in the air) will not come through, which prevents a bug
         //where you would stop falling a brief moment even though you were already falling from your jump.
         var pressedJump = false;
-        controls.jump.performed += _ => { if (comps.entityStats.grounded ) {
+        controls.jump.performed += _ => {
+            if (comps.entityStats.grounded ) {
                 comps.entityStats.lastSurface = (comps.fauxAttractor.currentSurface, comps.entityStats.groundUp);
                 comps.entityJump.Jump(); pressedJump = true;
             }

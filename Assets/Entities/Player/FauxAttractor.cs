@@ -30,8 +30,8 @@ public class FauxAttractor : MonoBehaviour
         var upAxisIndex = comps.entityStats.upAxis.index;
         var verticalRotationAxis = upAxisIndex == 0 ? 2 : upAxisIndex - 1;
         var raycastStart = pos;
-        raycastStart[upAxisIndex] -= 0.5f;
-        RaycastHit t;
+        raycastStart[upAxisIndex] += 0.5f;
+        Debug.DrawRay(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, Color.red, 1f);
         if (Physics.Raycast(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, out newHit, 1f) && (newHit.transform.gameObject != currentSurface.gameObject || !comps.entityMovement.allowRot))
         {
             if (newHit.transform.tag.Equals(Tags.WALL))

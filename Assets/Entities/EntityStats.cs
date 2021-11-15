@@ -6,7 +6,7 @@ using System.Linq;
 public class EntityStats : MonoBehaviour
 {
     [HideInInspector]
-    public bool grounded = false;
+    public bool grounded = true;
     [HideInInspector]
     public float moveSpeedRatio = 1;
     public EntityMeter meter;
