@@ -26,6 +26,7 @@ public class PlayerInput : MonoBehaviour
             (comps.entityMovement, "moving", true),
             (comps.entityJump, "jumped", false),
         };
+        comps.entityStats.meter.Start();
 
         GameObject.Find("PlayerVcam").GetComponent<CinemachineInputActionProvider>().XYAxis = controls.look;
 
@@ -69,6 +70,8 @@ public class PlayerInput : MonoBehaviour
                 comps.fauxAttractor.currentSurface = comps.entityStats.lastSurface.surface;
                 comps.entityStats.groundUp = comps.entityStats.lastSurface.groundUp;
             }
+
+            comps.animator.SetBool("sprinting", true);
         }
     }
 
@@ -82,6 +85,7 @@ public class PlayerInput : MonoBehaviour
             comps.fauxAttractor.CancelCustomGravity();
         };
         comps.entityStats.meter.resetThisUsage = false;
+        comps.animator.SetBool("sprinting", false);
     }
 
     private void ReleaseLookButton()

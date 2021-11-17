@@ -23,14 +23,18 @@ public class EntityMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        var vel = comps.rigidbody.velocity;
+        comps.animator.SetBool("moving", vel[comps.entityStats.horAxis] != 0 || vel[comps.entityStats.verAxis] != 0);
+
         if (moving)
+        {
             Move(direction);
+        }
         else
         {
             transform.rotation = Quaternion.LookRotation(transform.forward, comps.entityStats.groundUp); //rotation
         }
         ApplyGravity();
-
     }
 
     public void Move(Vector2 direction)

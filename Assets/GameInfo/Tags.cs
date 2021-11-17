@@ -10,4 +10,5 @@ public static class Tags
     public const string WALL = "Wall";
     public const string CEILING = "Ceiling";
     public const string CHECKPOINT = "Checkpoint";
+    public const string CANCEL_SPRINT = "CancelSprint";
 }

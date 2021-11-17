@@ -13,7 +13,6 @@ public class EntityMeter : MonoBehaviour
     public readonly float usageMinimum = 0.5f;
     public EntityComponents comps;
 
-    [HideInInspector]
     public (MonoBehaviour script, string method, object[] parameters) triggerCallInfo;
     public MethodInfo triggerCall { get; private set; }
     [HideInInspector]
@@ -77,6 +76,9 @@ public class EntityMeter : MonoBehaviour
             comps.fauxAttractor.CancelCustomGravity();
             comps.gameObject.ExecuteEffects(comps.gameObject, true, undoEffects);
             visualMeter.localScale = new Vector3(maxMeter * currMeter, visualMeter.localScale.y, visualMeter.localScale.z);
+
+            //Remove when applied on multiple entities
+            comps.animator.SetBool("sprinting", false);
         }
         else if (currMeter < maxMeter)
         {

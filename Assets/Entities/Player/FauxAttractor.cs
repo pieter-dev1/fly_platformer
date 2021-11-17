@@ -34,6 +34,7 @@ public class FauxAttractor : MonoBehaviour
         Debug.DrawRay(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, Color.red, 1f);
         if (Physics.Raycast(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, out newHit, 1f) && (newHit.transform.gameObject != currentSurface.gameObject || !comps.entityMovement.allowRot))
         {
+            print($"raycast: {newHit.transform.name}");
             if (newHit.transform.tag.Equals(Tags.WALL))
             {
                 onWall = true;
@@ -47,7 +48,6 @@ public class FauxAttractor : MonoBehaviour
         //{
         //    if (newHit.transform.tag.Equals(Tags.WALL))
         //    {
-        //        print("haaiii");
         //        onWall = true;
         //        currentSurface = newHit.transform;
         //        comps.entityStats.groundUp = newHit.normal;
@@ -91,10 +91,15 @@ public class FauxAttractor : MonoBehaviour
             //comps.entityMovement.allowRot = true;
             if((collision.collider.tag.Equals(Tags.WALL) && (comps.entityJump == null || !comps.entityJump.jumped)))
             {
-                comps.rigidbody.velocity = Vector3.zero;
-                comps.playerInput.CancelSprint();
+                CompletelyCancelWallRun();
             }
         }
+    }
+
+    public void CompletelyCancelWallRun()
+    {
+        comps.rigidbody.velocity = Vector3.zero;
+        comps.playerInput.CancelSprint();
     }
 
     public void CancelCustomGravity(bool disableAttractor = true)

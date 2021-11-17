@@ -25,6 +25,8 @@ public class EntityComponents : MonoBehaviour
     public new Collider collider;
     [HideInInspector]
     public Mesh mesh;
+    [HideInInspector]
+    public Animator animator;
 
 
     private void Awake()
@@ -39,5 +41,6 @@ public class EntityComponents : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
         mesh = GetComponent<Mesh>();
+        animator = GetComponent<Animator>();
     }
 }

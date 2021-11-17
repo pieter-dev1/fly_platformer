@@ -47,11 +47,6 @@ public class EntityStats : MonoBehaviour
         meter.currMeter = meter.maxMeter;
     }
 
-    private void Start()
-    {
-        meter.Start();
-    }
-
     private void Update()
     {
         meter.ManageMeter();
