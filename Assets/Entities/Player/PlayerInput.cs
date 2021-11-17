@@ -40,7 +40,7 @@ public class PlayerInput : MonoBehaviour
         var pressedJump = false;
         controls.jump.performed += _ => {
             if (comps.entityStats.grounded ) {
-                comps.entityStats.lastSurface = (comps.fauxAttractor.currentSurface, comps.entityStats.groundUp);
+                comps.entityStats.lastSurface = (comps.fauxAttractor.currentSurface.transform, comps.entityStats.groundUp);
                 comps.entityJump.Jump(); pressedJump = true;
             }
         };
@@ -67,7 +67,7 @@ public class PlayerInput : MonoBehaviour
             if (comps.entityJump.jumped)
             {
                 comps.fauxAttractor.onWall = comps.entityStats.lastSurface.surface.tag.Equals(Tags.WALL);
-                comps.fauxAttractor.currentSurface = comps.entityStats.lastSurface.surface;
+                comps.fauxAttractor.currentSurface = (comps.entityStats.lastSurface.surface, comps.entityStats.lastSurface.surface.GetComponent<BoxCollider>() != null);
                 comps.entityStats.groundUp = comps.entityStats.lastSurface.groundUp;
             }
 

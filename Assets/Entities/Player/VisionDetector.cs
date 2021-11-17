@@ -24,12 +24,12 @@ public class VisionDetector : MonoBehaviour
     {
         if(other.tag.Equals(Tags.MAIN_GROUND))
             return;
-        if (comps.fauxAttractor.currentSurface == other)
+        if (comps.fauxAttractor.currentSurface.transform == other)
         {
             MakeObjTransparent(other, false);
             return;
         }
-        else if (other.tag == Tags.PLAYER || (other.tag == Tags.GROUND && comps.fauxAttractor.currentSurface == other))
+        else if (other.tag == Tags.PLAYER || (other.tag == Tags.GROUND && comps.fauxAttractor.currentSurface.transform == other))
             return;
 
         MakeObjTransparent(other);
@@ -37,7 +37,7 @@ public class VisionDetector : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == Tags.PLAYER || (other.tag == Tags.GROUND && comps.fauxAttractor.currentSurface == other))
+        if (other.tag == Tags.PLAYER || (other.tag == Tags.GROUND && comps.fauxAttractor.currentSurface.transform == other))
             return;
 
         MakeObjTransparent(other, false);

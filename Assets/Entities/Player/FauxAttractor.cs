@@ -13,7 +13,7 @@ public class FauxAttractor : MonoBehaviour
     [SerializeField]
     private Transform mainGround;
     [SerializeField]
-    public Transform currentSurface;
+    public (Transform transform, bool cubeShaped) currentSurface;
     private RaycastHit newHit;
 
     private void Start()
@@ -21,7 +21,7 @@ public class FauxAttractor : MonoBehaviour
         comps = GetComponent<EntityComponents>();
         comps.rigidbody.useGravity = false;
         enabled = false;
-        currentSurface = mainGround;
+        currentSurface = (mainGround, true);
     }
 
     private void Update()
@@ -32,13 +32,12 @@ public class FauxAttractor : MonoBehaviour
         var raycastStart = pos;
         raycastStart[upAxisIndex] += 0.5f;
         Debug.DrawRay(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, Color.red, 1f);
-        if (Physics.Raycast(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, out newHit, 1f) && (newHit.transform.gameObject != currentSurface.gameObject || !comps.entityMovement.allowRot))
+        if (Physics.Raycast(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, out newHit, 1f) && (newHit.transform.gameObject != currentSurface.transform.gameObject || !comps.entityMovement.allowRot))
         {
-            print($"raycast: {newHit.transform.name}");
             if (newHit.transform.tag.Equals(Tags.WALL))
             {
                 onWall = true;
-                currentSurface = newHit.transform;
+                currentSurface = (newHit.transform, newHit.transform.GetComponent<BoxCollider>() != null);
                 comps.entityStats.groundUp = newHit.normal;
             }
         }
@@ -68,16 +67,18 @@ public class FauxAttractor : MonoBehaviour
             if(normal.y > 0 && Mathf.Approximately(angle, 90))
             {
                 onWall = false;
-                currentSurface = collision.transform;
+                currentSurface = (collision.transform, true);
                 comps.entityStats.groundUp = EntityStats.defaultGroundUp;
             }
-
         }
+
         if(enabled && (collision.collider.gameObject.layer.Equals(Layers.GROUND) || collision.collider.tag.Equals(Tags.WALL)))
         {
             var rot = Vector3.zero;
             if (comps.entityStats.upAxis.index != MoveAxis.VERTICAL)
+            {
                 rot[comps.entityStats.horAxis] = -90;
+            }
             if (rot != Vector3.zero)
                 transform.rotation = Quaternion.LookRotation(rot, comps.entityStats.groundUp); //rotation
         }
@@ -85,7 +86,7 @@ public class FauxAttractor : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.Equals(currentSurface.gameObject))
+        if (collision.gameObject.Equals(currentSurface.transform.gameObject))
         {
             //WHEN WALKING AROUND CORNERS ENABLED
             //comps.entityMovement.allowRot = true;
@@ -104,9 +105,9 @@ public class FauxAttractor : MonoBehaviour
 
     public void CancelCustomGravity(bool disableAttractor = true)
     {
-        currentSurface = mainGround;
-        if (comps.entityStats.groundUp != new Vector3(0, 1, 0))
-            comps.entityStats.groundUp = new Vector3(0, 1, 0);
+        currentSurface = (mainGround, true);
+        if (comps.entityStats.groundUp != EntityStats.defaultGroundUp)
+            comps.entityStats.groundUp = EntityStats.defaultGroundUp;
         enabled = !disableAttractor;
         onWall = false;
     }
