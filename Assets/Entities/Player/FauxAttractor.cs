@@ -36,6 +36,13 @@ public class FauxAttractor : MonoBehaviour
         {
             if (newHit.transform.tag.Equals(Tags.WALL))
             {
+                if (comps.entityJump.jumped)
+                {
+                    //Temp fix for bug where new gravity wouldnt be applied when jumping to another wall. 
+                    comps.rigidbody.constraints = RigidbodyConstraints.FreezePosition;
+                    comps.rigidbody.constraints &= ~RigidbodyConstraints.FreezePosition;
+                }
+                print($"{newHit.transform.name}: {newHit.normal}");
                 onWall = true;
                 currentSurface = (newHit.transform, newHit.transform.GetComponent<BoxCollider>() != null);
                 comps.entityStats.groundUp = newHit.normal;

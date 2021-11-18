@@ -11,6 +11,8 @@ public class PlayerInput : MonoBehaviour
     private EntityComponents comps;
     private int enableLookButtonsPressed = 0; //when enableLook and axisLook are both held, releasing one will disable looking around, while it should still be allowed. So if both are held, releasing one shouldnt disable.
 
+    public bool pressedJump = false;
+
     //Sprint/wallrun effects
     private readonly EffectExecution sprintEffect = new EffectExecution(Effect.MOVESPEED, 30);
 
@@ -37,7 +39,6 @@ public class PlayerInput : MonoBehaviour
         //pressedJump tracks if the jump input has succesfully come through. With this it can be forced that the jumpcancel input only comes through on the actual jump
         //(the first time you press the button). This means every press (jumpcancel) after (whem youre in the air) will not come through, which prevents a bug
         //where you would stop falling a brief moment even though you were already falling from your jump.
-        var pressedJump = false;
         controls.jump.performed += _ => {
             if (comps.entityStats.grounded ) {
                 comps.entityStats.lastSurface = (comps.fauxAttractor.currentSurface.transform, comps.entityStats.groundUp);
@@ -49,7 +50,8 @@ public class PlayerInput : MonoBehaviour
             //Last condition makes sure the player is still jumping up, because when falling cancelling the jump has no use and is buggy.
             && ((comps.entityStats.upAxis.positive && comps.rigidbody.velocity[comps.entityStats.upAxis.index] > 0) 
             || (!comps.entityStats.upAxis.positive && comps.rigidbody.velocity[comps.entityStats.upAxis.index] < 0))) {
-                comps.entityJump.CancelJump(); pressedJump = false; }
+                CancelJump();
+            }
         };
 
         //Sprint/wallrun
@@ -86,6 +88,12 @@ public class PlayerInput : MonoBehaviour
         };
         comps.entityStats.meter.resetThisUsage = false;
         comps.animator.SetBool("sprinting", false);
+    }
+
+    public void CancelJump()
+    {
+        comps.entityJump.CancelJump();
+        pressedJump = false;
     }
 
     private void ReleaseLookButton()
