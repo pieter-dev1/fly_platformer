@@ -86,7 +86,7 @@ public class FauxAttractor : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.Equals(currentSurface.transform.gameObject))
+        if (collision.gameObject.Equals(currentSurface.transform.gameObject) && currentSurface.cubeShaped)
         {
             //WHEN WALKING AROUND CORNERS ENABLED
             //comps.entityMovement.allowRot = true;

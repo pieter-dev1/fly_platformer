@@ -59,8 +59,27 @@ public class EntityMovement : MonoBehaviour
             }
 
             var movement = (vector) * Time.deltaTime * (moveSpeed * comps.entityStats.moveSpeedRatio);
-            if(allowRot)
-                transform.rotation = Quaternion.LookRotation(movement, comps.entityStats.groundUp); //rotation
+            if (allowRot) {
+                if (comps.fauxAttractor.currentSurface.cubeShaped)
+                    transform.rotation = Quaternion.LookRotation(movement, comps.entityStats.groundUp);
+                else
+                {
+                    RaycastHit hit;
+                    var surfaceColl = comps.fauxAttractor.currentSurface.transform.GetComponent<Collider>();
+                    var surfacePoint = Physics.ClosestPoint(transform.position, surfaceColl, surfaceColl.transform.position, surfaceColl.transform.rotation);
+                    var distance = Vector3.Distance(transform.position, surfacePoint);
+                    if (Physics.Raycast(comps.fauxAttractor.cornerDetector.position, surfacePoint - transform.position, out hit))
+                    {
+                        if (hit.normal != comps.entityStats.groundUp)
+                        {
+                            //print($"diff normal: {hit.normal}");
+                            comps.entityStats.groundUp = hit.normal;
+                        }
+                    }
+
+                    transform.rotation = Quaternion.LookRotation(movement, comps.entityStats.groundUp);
+                }
+            }
 
             //apply vertical force (f.e. jumpforce or gravity)
             movement[groundUpAxisIndex] = comps.rigidbody.velocity[groundUpAxisIndex];
@@ -74,7 +93,7 @@ public class EntityMovement : MonoBehaviour
         //if (!comps.entityStats.grounded && comps.fauxAttractor != null && comps.fauxAttractor.enabled)
         //{
         //    RaycastHit hit;
-        //    var surfaceColl = comps.fauxAttractor.currentSurface.GetComponent<Collider>();
+        //    var surfaceColl = comps.fauxAttractor.currentSurface.transform.GetComponent<Collider>();
         //    var surfacePoint = Physics.ClosestPoint(transform.position, surfaceColl, surfaceColl.transform.position, surfaceColl.transform.rotation);
         //    var distance = Vector3.Distance(transform.position, surfacePoint);
         //    if (Physics.Raycast(comps.fauxAttractor.cornerDetector.position, surfacePoint - transform.position, out hit))
@@ -89,7 +108,17 @@ public class EntityMovement : MonoBehaviour
         //    }
         //}
         //else
-        comps.rigidbody.AddForce(comps.entityStats.groundUp * gravity);
+        //    comps.rigidbody.AddForce(comps.entityStats.groundUp * gravity);
+
+
+        if (comps.fauxAttractor.currentSurface.cubeShaped)
+            comps.rigidbody.AddForce(comps.entityStats.groundUp * gravity);
+        else
+        {
+            print((transform.position - comps.fauxAttractor.currentSurface.transform.position).normalized * gravity);
+            comps.rigidbody.AddForce((transform.position - comps.fauxAttractor.currentSurface.transform.position).normalized * gravity);
+        }
+
     }
 
     public void CancelMovement()
