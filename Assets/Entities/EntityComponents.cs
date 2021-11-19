@@ -5,39 +5,33 @@ using UnityEngine;
 public class EntityComponents : MonoBehaviour
 {
     //Entity
-    [HideInInspector]
     public EntityStats entityStats;
-    [HideInInspector]
     public EntityMovement entityMovement;
-    [HideInInspector]
     public EntityJump entityJump;
-    [HideInInspector]
     public FauxAttractor fauxAttractor;
 
     //Player
-    [HideInInspector]
     public PlayerInput playerInput;
 
     //Components
-    [HideInInspector]
     public new Rigidbody rigidbody;
-    [HideInInspector]
     public new Collider collider;
-    [HideInInspector]
     public Mesh mesh;
+    public Animator animator;
 
 
-    private void Awake()
-    {
-        entityStats = GetComponent<EntityStats>();
-        entityMovement = GetComponent<EntityMovement>();
-        entityJump = GetComponent<EntityJump>();
-        fauxAttractor = GetComponent<FauxAttractor>();
+    //private void Awake()
+    //{
+    //    entityStats = GetComponent<EntityStats>();
+    //    entityMovement = GetComponent<EntityMovement>();
+    //    entityJump = GetComponent<EntityJump>();
+    //    fauxAttractor = GetComponent<FauxAttractor>();
 
-        playerInput = GetComponent<PlayerInput>();
+    //    playerInput = GetComponent<PlayerInput>();
 
-        rigidbody = GetComponent<Rigidbody>();
-        collider = GetComponent<Collider>();
-        mesh = GetComponent<Mesh>();
-    }
+    //    rigidbody = GetComponent<Rigidbody>();
+    //    collider = GetComponent<Collider>();
+    //    mesh = GetComponent<Mesh>();
+    //    animator = GetComponent<Animator>();
+    //}
 }

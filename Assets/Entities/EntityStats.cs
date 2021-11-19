@@ -5,8 +5,10 @@ using System.Linq;
 
 public class EntityStats : MonoBehaviour
 {
+    public EntityComponents comps;
+
     [HideInInspector]
-    public bool grounded = false;
+    public bool grounded = true;
     [HideInInspector]
     public float moveSpeedRatio = 1;
     public EntityMeter meter;
@@ -22,14 +24,25 @@ public class EntityStats : MonoBehaviour
         get => groundUpBackUp;
         set {
             groundUpBackUp = value;
-            if (value.x != 0)
-                upAxis = (MoveAxis.HORIZONTAL, value.x > 0);
-            else if (value.y != 0)
-                upAxis = (MoveAxis.VERTICAL, value.y > 0);
-            else if (value.z != 0)
-                upAxis = (MoveAxis.DIAGONAL, value.z > 0);
+            if (true)
+            {
+                if (value.x != 0)
+                    upAxis = (MoveAxis.HORIZONTAL, value.x > 0);
+                else if (value.y != 0)
+                {
+                    upAxis = (MoveAxis.VERTICAL, value.y > 0);
+                }
+                else if (value.z != 0)
+                {
+                    upAxis = (MoveAxis.DIAGONAL, value.z > 0);
+                }
+                else
+                    Debug.LogError($"Entity {transform.name} doesn't have it's axis clarified! Make sure the upside of the ground it's standing on is set.");
+            }
             else
-                Debug.LogError($"Entity {transform.name} doesn't have it's axis clarified! Make sure the upside of the ground it's standing on is set.");
+            {
+                upAxis = (MoveAxis.HORIZONTAL, true);
+            }
             horAxis = MoveAxis.AXES.First(x => x != upAxis.index);
             verAxis = MoveAxis.AXES.Last(x => x != upAxis.index);
         }
@@ -47,14 +60,8 @@ public class EntityStats : MonoBehaviour
         meter.currMeter = meter.maxMeter;
     }
 
-    private void Start()
-    {
-        meter.Start();
-    }
-
     private void Update()
     {
         meter.ManageMeter();
     }
-
 }
