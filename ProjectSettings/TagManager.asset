@@ -9,6 +9,7 @@ TagManager:
   - Ceiling
   - Checkpoint
   - MainGround
+  - Collectable
   layers:
   - Default
   - TransparentFX

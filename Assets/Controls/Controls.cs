@@ -12,4 +12,5 @@ public class Controls : ScriptableObject
     public InputAction look;
     public InputAction jump;
     public InputAction sprint;
+    public InputAction toCheckpoint;
 }

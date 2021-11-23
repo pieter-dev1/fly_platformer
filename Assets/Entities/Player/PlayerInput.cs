@@ -57,11 +57,18 @@ public class PlayerInput : MonoBehaviour
         //Sprint/wallrun
         controls.sprint.started += _ => TriggerSprint();
         controls.sprint.canceled += _ => CancelSprint();
+
+        //To checkpoint
+        controls.toCheckpoint.started += _ => {
+            transform.position = Challenge.startPoint;
+            var meter = comps.entityStats.meter;
+            meter.FillMeter(meter.maxMeter);
+        };
     }
 
     public void TriggerSprint()
     {
-        if (comps.entityStats.meter.currMeter >= comps.entityStats.meter.usageMinimum)
+        if ((comps.entityStats.grounded || (!comps.entityStats.grounded && comps.entityJump.jumped)) && comps.entityStats.meter.currMeter >= comps.entityStats.meter.usageMinimum)
         {
             gameObject.ExecuteEffects(gameObject, false, sprintEffect);
             comps.fauxAttractor.enabled = true;
@@ -106,7 +113,7 @@ public class PlayerInput : MonoBehaviour
         else enableLookButtonsPressed--;
     }
 
-    private void OnEnable()
+    public void OnEnable()
     {
         controls.move.Enable();
         controls.enableLook.Enable();
@@ -114,9 +121,10 @@ public class PlayerInput : MonoBehaviour
         controls.look.Disable();
         controls.jump.Enable();
         controls.sprint.Enable();
+        controls.toCheckpoint.Enable();
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         controls.move.Disable();
         controls.enableLook.Disable();
@@ -124,5 +132,17 @@ public class PlayerInput : MonoBehaviour
         controls.look.Disable();
         controls.jump.Disable();
         controls.sprint.Disable();
+        controls.toCheckpoint.Disable();
     }
+
+    public void ToLastCheckpoint()
+    {
+        transform.position = Challenge.startPoint;
+        var meter = comps.entityStats.meter;
+        meter.FillMeter(meter.maxMeter);
+        
+        OnDisable();
+        Invoke("OnEnable", 0.5f);
+    }
+
 }

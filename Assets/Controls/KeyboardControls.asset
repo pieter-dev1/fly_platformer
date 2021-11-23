@@ -133,10 +133,34 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: 80aa9267-0cac-435c-a299-a16f9bafb42f
-      m_Path: <Keyboard>/leftShift
+      m_Id: 2857e91b-3b22-44ed-a116-92bda6be09f5
+      m_Path: <Keyboard>/shift
       m_Interactions: 
       m_Processors: 
       m_Groups: 
       m_Action: Sprint
+      m_Flags: 0
+    - m_Name: 
+      m_Id: fe3a0975-f266-4e71-9dda-91fc5e017923
+      m_Path: <Keyboard>/ctrl
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Sprint
+      m_Flags: 0
+  toCheckpoint:
+    m_Name: To Checkpoint
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f9e4cf49-8282-45c4-9ce8-739086271ba9
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 6236346c-3f02-48bf-9638-9953b7da825d
+      m_Path: <Keyboard>/1
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: To Checkpoint
       m_Flags: 0

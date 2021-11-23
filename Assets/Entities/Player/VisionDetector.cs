@@ -22,7 +22,7 @@ public class VisionDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag.Equals(Tags.MAIN_GROUND))
+        if(other.tag.Equals(Tags.MAIN_GROUND) || other.tag.Equals(Tags.COLLECTABLE))
             return;
         if (comps.fauxAttractor.currentSurface.transform == other)
         {
@@ -37,7 +37,7 @@ public class VisionDetector : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == Tags.PLAYER || (other.tag == Tags.GROUND && comps.fauxAttractor.currentSurface.transform == other))
+        if (other.tag == Tags.PLAYER || other.tag == Tags.COLLECTABLE || (other.tag == Tags.GROUND && comps.fauxAttractor.currentSurface.transform == other))
             return;
 
         MakeObjTransparent(other, false);
@@ -92,6 +92,28 @@ public class VisionDetector : MonoBehaviour
                 meshes.Add(childMesh);
         }
 
+        //In nearest parent with mesh
+        if (!meshes.Any())
+        {
+            var parentMesh = FindParentMesh(obj.transform);
+            if (parentMesh != null)
+                meshes.Add(parentMesh);
+        }
+
         return meshes;
+    }
+
+    private MeshRenderer FindParentMesh(Transform obj)
+    {
+        var parent = obj.parent;
+        if (parent != null)
+        {
+            var parentMesh = parent.GetComponent<MeshRenderer>();
+            if (parentMesh != null)
+                return parentMesh;
+
+            return FindParentMesh(parent);
+        }
+        return null;
     }
 }

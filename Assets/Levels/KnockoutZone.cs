@@ -8,11 +8,13 @@ public class KnockoutZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((!onlyKoWhenGrounded && other.tag == Tags.PLAYER) || (onlyKoWhenGrounded && (!other.GetComponent<FauxAttractor>().enabled || gameObject == other.GetComponent<FauxAttractor>().currentSurface.transform.gameObject)))
+        if ((!onlyKoWhenGrounded && other.tag == Tags.PLAYER) || (other.tag == Tags.PLAYER && onlyKoWhenGrounded && (!other.GetComponent<FauxAttractor>().enabled || gameObject == other.GetComponent<FauxAttractor>().currentSurface.transform.gameObject)))
         {
-            other.transform.position = Challenge.startPoint;
-            var meter = other.GetComponent<EntityComponents>().entityStats.meter;
-            meter.FillMeter(meter.maxMeter);
+            other.GetComponent<PlayerInput>().ToLastCheckpoint();
         }
     }
+
+
+
+    
 }
