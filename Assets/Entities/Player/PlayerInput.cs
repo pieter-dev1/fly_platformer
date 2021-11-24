@@ -64,6 +64,17 @@ public class PlayerInput : MonoBehaviour
             var meter = comps.entityStats.meter;
             meter.FillMeter(meter.maxMeter);
         };
+
+        //To next safepoint
+        controls.toNextPoint.started += _ =>
+        {
+            GetComponent<PlayerToNextPoint>().ToPoint(true);
+        };
+        //To previous safepoint
+        controls.toPrevPoint.started += _ =>
+        {
+            GetComponent<PlayerToNextPoint>().ToPoint(false);
+        };
     }
 
     public void TriggerSprint()
@@ -122,6 +133,8 @@ public class PlayerInput : MonoBehaviour
         controls.jump.Enable();
         controls.sprint.Enable();
         controls.toCheckpoint.Enable();
+        controls.toNextPoint.Enable();
+        controls.toPrevPoint.Enable();
     }
 
     public void OnDisable()
@@ -133,6 +146,8 @@ public class PlayerInput : MonoBehaviour
         controls.jump.Disable();
         controls.sprint.Disable();
         controls.toCheckpoint.Disable();
+        controls.toNextPoint.Disable();
+        controls.toPrevPoint.Disable();
     }
 
     public void ToLastCheckpoint()
