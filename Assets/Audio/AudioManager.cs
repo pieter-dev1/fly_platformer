@@ -6,6 +6,8 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
+    public string currentMusic;
+    public static bool musicEnabled = true;
 
     // Start is called before the first frame update
     void Awake()
@@ -17,6 +19,16 @@ public class AudioManager : MonoBehaviour
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
+        }
+    }
+
+
+    public void PlayMusic(string musicName)
+    {
+        if (musicEnabled)
+        {
+            currentMusic = musicName;
+            PlaySound(musicName);
         }
     }
 

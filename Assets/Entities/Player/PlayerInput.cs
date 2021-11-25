@@ -32,7 +32,10 @@ public class PlayerInput : MonoBehaviour
 
         GameObject.Find("PlayerVcam").GetComponent<CinemachineInputActionProvider>().XYAxis = controls.look;
 
-        controls.move.started += _ => { comps.entityMovement.moving = true; if (comps.entityStats.grounded) { comps.audioManager.PlaySound("PlayerWalk"); } };
+        controls.move.started += _ => {
+            comps.entityMovement.moving = true;
+            //if (comps.entityStats.grounded) { comps.audioManager.PlaySound("PlayerWalk"); } 
+        };
         controls.move.performed += ctx => comps.entityMovement.direction = ctx.ReadValue<Vector2>();
         controls.move.canceled += _ => { comps.entityMovement.CancelMovement(); };
 
@@ -63,6 +66,13 @@ public class PlayerInput : MonoBehaviour
             transform.position = Challenge.startPoint;
             var meter = comps.entityStats.meter;
             meter.FillMeter(meter.maxMeter);
+        };
+
+        //Pause
+        controls.pause.started += _ =>
+        {
+            Time.timeScale = Time.timeScale > 0 ? 0 : 1;
+            return;
         };
 
         //To next safepoint
@@ -132,6 +142,7 @@ public class PlayerInput : MonoBehaviour
         controls.look.Disable();
         controls.jump.Enable();
         controls.sprint.Enable();
+        controls.pause.Enable();
         controls.toCheckpoint.Enable();
         controls.toNextPoint.Enable();
         controls.toPrevPoint.Enable();
@@ -145,6 +156,7 @@ public class PlayerInput : MonoBehaviour
         controls.look.Disable();
         controls.jump.Disable();
         controls.sprint.Disable();
+        controls.pause.Enable();
         controls.toCheckpoint.Disable();
         controls.toNextPoint.Disable();
         controls.toPrevPoint.Disable();

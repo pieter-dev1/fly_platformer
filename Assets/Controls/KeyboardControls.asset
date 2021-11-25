@@ -148,6 +148,22 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Sprint
       m_Flags: 0
+  pause:
+    m_Name: Pause
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 13cf1532-0fee-42c0-ac19-0f1fa3e9600f
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: cdefce8b-8dc8-4f88-8cd5-69353833cc44
+      m_Path: <Keyboard>/escape
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Pause
+      m_Flags: 0
   toCheckpoint:
     m_Name: To Checkpoint
     m_Type: 0

@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &632752519407993415
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 632752519407993401}
+  - component: {fileID: 632752519407993400}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &632752519407993401
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632752519407993415}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.918064, y: 14.662775, z: 94.50842}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &632752519407993400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632752519407993415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e47d18d62a8546041aaf71fe2f0786bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: CuteBGM
+    clip: {fileID: 8300000, guid: 3d2d0045f9f87cb44bfdc37819808653, type: 3}
+    volume: 0.015
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Forever
+    clip: {fileID: 8300000, guid: a88af34a97c294748bc019b5f1c6b6c0, type: 3}
+    volume: 0.03
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: SJF
+    clip: {fileID: 8300000, guid: 9a5d18f32c8f8154d976605f8a0a280a, type: 3}
+    volume: 0.01
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Sugar
+    clip: {fileID: 8300000, guid: b823797b4960c1d46ae113d9cd5116f0, type: 3}
+    volume: 0.015
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: PlayerWalk
+    clip: {fileID: 8300000, guid: ce61c244ef08c8e4cbd9d296c674e7f6, type: 3}
+    volume: 0.7
+    pitch: 0.25
+    loop: 1
+    source: {fileID: 0}
+  currentMusic: 

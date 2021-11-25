@@ -10,7 +10,7 @@ public class Sound
     public AudioClip clip;
     [Range(0,1)]
     public float volume;
-    [Range(.1f,.3f)]
+    [Range(.1f, 1f)]
     public float pitch;
     public bool loop = true;
 
