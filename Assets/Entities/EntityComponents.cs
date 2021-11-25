@@ -19,6 +19,9 @@ public class EntityComponents : MonoBehaviour
     public Mesh mesh;
     public Animator animator;
 
+    //General
+    public AudioManager audioManager;
+
 
     //private void Awake()
     //{

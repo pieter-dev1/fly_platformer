@@ -32,7 +32,7 @@ public class PlayerInput : MonoBehaviour
 
         GameObject.Find("PlayerVcam").GetComponent<CinemachineInputActionProvider>().XYAxis = controls.look;
 
-        controls.move.started += _ => { comps.entityMovement.moving = true; };
+        controls.move.started += _ => { comps.entityMovement.moving = true; if (comps.entityStats.grounded) { comps.audioManager.PlaySound("PlayerWalk"); } };
         controls.move.performed += ctx => comps.entityMovement.direction = ctx.ReadValue<Vector2>();
         controls.move.canceled += _ => { comps.entityMovement.CancelMovement(); };
 
