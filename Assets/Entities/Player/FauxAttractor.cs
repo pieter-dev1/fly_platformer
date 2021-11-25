@@ -10,8 +10,7 @@ public class FauxAttractor : MonoBehaviour
     public bool onWall = false;
     [SerializeField]
     public Transform cornerDetector;
-    [SerializeField]
-    private Transform mainGround;
+    public Transform mainGround;
     [SerializeField]
     public (Transform transform, bool cubeShaped) currentSurface;
     private RaycastHit newHit;
@@ -33,10 +32,10 @@ public class FauxAttractor : MonoBehaviour
         var verticalRotationAxis = upAxisIndex == 0 ? 2 : upAxisIndex - 1;
         var raycastStart = pos;
         raycastStart[upAxisIndex] += 0.5f;
-        Debug.DrawRay(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, Color.red, 1f);
+        //Debug.DrawRay(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, Color.red, 1f);
         if (allowSurfaceSwitch && Physics.Raycast(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, out newHit, 1f) && (newHit.transform.gameObject != currentSurface.transform.gameObject || !comps.entityMovement.allowRot))
         {
-            if (newHit.transform.tag.Equals(Tags.WALL))
+            if (newHit.transform.gameObject.layer.Equals(Layers.GROUND) && newHit.transform.tag.Equals(Tags.WALL))
             {
                 allowSurfaceSwitch = false;
                 if (comps.entityJump.jumped)
