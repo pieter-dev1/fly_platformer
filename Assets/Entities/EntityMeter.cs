@@ -13,13 +13,13 @@ public class EntityMeter : MonoBehaviour
     public readonly float usageMinimum = 0.5f;
     public EntityComponents comps;
 
-    [HideInInspector]
     public (MonoBehaviour script, string method, object[] parameters) triggerCallInfo;
     public MethodInfo triggerCall { get; private set; }
     [HideInInspector]
     public List<(Component script, string variable, object value)> triggerConditionsInfo = new List<(Component script, string variable, object value)>();
     public List<(Component script, FieldInfo variable, object conditionValue)> triggerConditions { get; private set; }
     private bool TriggerConditionsMet() => triggerConditions.All(x => x.variable.GetValue(x.script).GetHashCode() == x.conditionValue.GetHashCode());
+    //WHEN THERE'S MULTIPLE METERS
     //private bool TriggerConditionsMet() {
     //    foreach (var c in triggerConditions)
     //    {
@@ -76,6 +76,9 @@ public class EntityMeter : MonoBehaviour
             comps.fauxAttractor.CancelCustomGravity();
             comps.gameObject.ExecuteEffects(comps.gameObject, true, undoEffects);
             visualMeter.localScale = new Vector3(maxMeter * currMeter, visualMeter.localScale.y, visualMeter.localScale.z);
+
+            //Remove when applied on multiple entities
+            comps.animator.SetBool("sprinting", false);
         }
         else if (currMeter < maxMeter)
         {

@@ -4,5 +4,6 @@ using UnityEngine;
 
 public static class Layers
 {
+    public const int DEFAULT = 0;
     public const int GROUND = 6;
 }

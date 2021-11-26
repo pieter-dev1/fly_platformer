@@ -11,6 +11,8 @@ public class PlayerInput : MonoBehaviour
     private EntityComponents comps;
     private int enableLookButtonsPressed = 0; //when enableLook and axisLook are both held, releasing one will disable looking around, while it should still be allowed. So if both are held, releasing one shouldnt disable.
 
+    public bool pressedJump = false;
+
     //Sprint/wallrun effects
     private readonly EffectExecution sprintEffect = new EffectExecution(Effect.MOVESPEED, 30);
 
@@ -26,25 +28,23 @@ public class PlayerInput : MonoBehaviour
             (comps.entityMovement, "moving", true),
             (comps.entityJump, "jumped", false),
         };
+        comps.entityStats.meter.Start();
 
         GameObject.Find("PlayerVcam").GetComponent<CinemachineInputActionProvider>().XYAxis = controls.look;
 
-        controls.move.started += _ => { comps.entityMovement.moving = true; };
+        controls.move.started += _ => {
+            comps.entityMovement.moving = true;
+            //if (comps.entityStats.grounded) { comps.audioManager.PlaySound("PlayerWalk"); } 
+        };
         controls.move.performed += ctx => comps.entityMovement.direction = ctx.ReadValue<Vector2>();
         controls.move.canceled += _ => { comps.entityMovement.CancelMovement(); };
-
-        //controls.enableLook.started += _ => { controls.look.Enable(); enableLookButtonsPressed++; };
-        //controls.enableLook.canceled += _ => ReleaseLookButton();
-
-        //controls.axisLook.started += _ => { controls.look.Enable(); enableLookButtonsPressed++; };
-        //controls.axisLook.canceled += _ => ReleaseLookButton();
 
         //pressedJump tracks if the jump input has succesfully come through. With this it can be forced that the jumpcancel input only comes through on the actual jump
         //(the first time you press the button). This means every press (jumpcancel) after (whem youre in the air) will not come through, which prevents a bug
         //where you would stop falling a brief moment even though you were already falling from your jump.
-        var pressedJump = false;
-        controls.jump.performed += _ => { if (comps.entityStats.grounded ) {
-                comps.entityStats.lastSurface = (comps.fauxAttractor.currentSurface, comps.entityStats.groundUp);
+        controls.jump.performed += _ => {
+            if (comps.entityStats.grounded ) {
+                comps.entityStats.lastSurface = (comps.fauxAttractor.currentSurface.transform, comps.entityStats.groundUp);
                 comps.entityJump.Jump(); pressedJump = true;
             }
         };
@@ -53,17 +53,43 @@ public class PlayerInput : MonoBehaviour
             //Last condition makes sure the player is still jumping up, because when falling cancelling the jump has no use and is buggy.
             && ((comps.entityStats.upAxis.positive && comps.rigidbody.velocity[comps.entityStats.upAxis.index] > 0) 
             || (!comps.entityStats.upAxis.positive && comps.rigidbody.velocity[comps.entityStats.upAxis.index] < 0))) {
-                comps.entityJump.CancelJump(); pressedJump = false; }
+                CancelJump();
+            }
         };
 
         //Sprint/wallrun
         controls.sprint.started += _ => TriggerSprint();
         controls.sprint.canceled += _ => CancelSprint();
+
+        //To checkpoint
+        controls.toCheckpoint.started += _ => {
+            transform.position = Challenge.startPoint;
+            var meter = comps.entityStats.meter;
+            meter.FillMeter(meter.maxMeter);
+        };
+
+        //Pause
+        controls.pause.started += _ =>
+        {
+            Time.timeScale = Time.timeScale > 0 ? 0 : 1;
+            return;
+        };
+
+        //To next safepoint
+        controls.toNextPoint.started += _ =>
+        {
+            GetComponent<PlayerToNextPoint>().ToPoint(true);
+        };
+        //To previous safepoint
+        controls.toPrevPoint.started += _ =>
+        {
+            GetComponent<PlayerToNextPoint>().ToPoint(false);
+        };
     }
 
     public void TriggerSprint()
     {
-        if (comps.entityStats.meter.currMeter >= comps.entityStats.meter.usageMinimum)
+        if ((comps.entityStats.grounded || (!comps.entityStats.grounded && comps.entityJump.jumped)) && comps.entityStats.meter.currMeter >= comps.entityStats.meter.usageMinimum)
         {
             gameObject.ExecuteEffects(gameObject, false, sprintEffect);
             comps.fauxAttractor.enabled = true;
@@ -71,9 +97,11 @@ public class PlayerInput : MonoBehaviour
             if (comps.entityJump.jumped)
             {
                 comps.fauxAttractor.onWall = comps.entityStats.lastSurface.surface.tag.Equals(Tags.WALL);
-                comps.fauxAttractor.currentSurface = comps.entityStats.lastSurface.surface;
+                comps.fauxAttractor.currentSurface = (comps.entityStats.lastSurface.surface, comps.entityStats.lastSurface.surface.GetComponent<BoxCollider>() != null);
                 comps.entityStats.groundUp = comps.entityStats.lastSurface.groundUp;
             }
+
+            comps.animator.SetBool("sprinting", true);
         }
     }
 
@@ -87,6 +115,13 @@ public class PlayerInput : MonoBehaviour
             comps.fauxAttractor.CancelCustomGravity();
         };
         comps.entityStats.meter.resetThisUsage = false;
+        comps.animator.SetBool("sprinting", false);
+    }
+
+    public void CancelJump()
+    {
+        comps.entityJump.CancelJump();
+        pressedJump = false;
     }
 
     private void ReleaseLookButton()
@@ -99,7 +134,7 @@ public class PlayerInput : MonoBehaviour
         else enableLookButtonsPressed--;
     }
 
-    private void OnEnable()
+    public void OnEnable()
     {
         controls.move.Enable();
         controls.enableLook.Enable();
@@ -107,9 +142,13 @@ public class PlayerInput : MonoBehaviour
         controls.look.Disable();
         controls.jump.Enable();
         controls.sprint.Enable();
+        controls.pause.Enable();
+        controls.toCheckpoint.Enable();
+        controls.toNextPoint.Enable();
+        controls.toPrevPoint.Enable();
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         controls.move.Disable();
         controls.enableLook.Disable();
@@ -117,5 +156,25 @@ public class PlayerInput : MonoBehaviour
         controls.look.Disable();
         controls.jump.Disable();
         controls.sprint.Disable();
+        controls.pause.Enable();
+        controls.toCheckpoint.Disable();
+        controls.toNextPoint.Disable();
+        controls.toPrevPoint.Disable();
     }
+
+    public void ToLastCheckpoint()
+    {
+        transform.position = Challenge.startPoint;
+        var meter = comps.entityStats.meter;
+        meter.FillMeter(meter.maxMeter);
+        
+        OnDisable();
+        Invoke("OnEnable", 0.5f);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        print(collision.transform.name);
+    }
+
 }

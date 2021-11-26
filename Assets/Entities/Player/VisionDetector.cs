@@ -22,14 +22,14 @@ public class VisionDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag.Equals(Tags.MAIN_GROUND))
+        if(other.tag.Equals(Tags.MAIN_GROUND) || other.tag.Equals(Tags.COLLECTABLE))
             return;
-        if (comps.fauxAttractor.currentSurface == other)
+        if (comps.fauxAttractor.currentSurface.transform == other)
         {
             MakeObjTransparent(other, false);
             return;
         }
-        else if (other.tag == Tags.PLAYER || (other.tag == Tags.GROUND && comps.fauxAttractor.currentSurface == other))
+        else if (other.tag == Tags.PLAYER || (other.tag == Tags.GROUND && comps.fauxAttractor.currentSurface.transform == other))
             return;
 
         MakeObjTransparent(other);
@@ -37,7 +37,7 @@ public class VisionDetector : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == Tags.PLAYER || (other.tag == Tags.GROUND && comps.fauxAttractor.currentSurface == other))
+        if (other.tag == Tags.PLAYER || other.tag == Tags.COLLECTABLE || (other.tag == Tags.GROUND && comps.fauxAttractor.currentSurface.transform == other))
             return;
 
         MakeObjTransparent(other, false);
@@ -48,24 +48,11 @@ public class VisionDetector : MonoBehaviour
         var meshes = GetObjMeshes(obj.gameObject);
         if (!meshes.Any())
             return;
-        //print($"{mesh.material.GetTag("RenderTag", true)}, {mesh.sharedMaterial.GetTag("RenderType", true)}");
         var color = Color.white;
         if (transparent)
         {
             foreach (var mesh in meshes)
             {
-                //mesh.material.SetOverrideTag("RenderType", "Transparent");
-                //mesh.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                //mesh.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                //mesh.material.SetInt("_ZWrite", 0);
-                //mesh.material.DisableKeyword("_ALPHATEST_ON");
-                //mesh.material.EnableKeyword("_ALPHABLEND_ON");
-                //mesh.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                //mesh.material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-
-                color = mesh.material.color;
-                color.a = 0.2f;
-                //mesh.material.color = color;
                 transparentMeshes.Add((mesh.gameObject, mesh.material));
                 mesh.material = transparentMaterial;
             }
@@ -76,17 +63,6 @@ public class VisionDetector : MonoBehaviour
         {
             foreach (var mesh in meshes)
             {
-                //mesh.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                //mesh.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                //mesh.material.SetInt("_ZWrite", 1);
-                //mesh.material.DisableKeyword("_ALPHATEST_ON");
-                //mesh.material.DisableKeyword("_ALPHABLEND_ON");
-                //mesh.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                //mesh.material.renderQueue = -1;
-
-                color = mesh.material.color;
-                color.a = 1;
-                //mesh.material.color = color;
                 var meshObj = transparentMeshes.First(x => x.mesh == mesh.gameObject);
                 mesh.material = meshObj.material;
             }
@@ -116,6 +92,28 @@ public class VisionDetector : MonoBehaviour
                 meshes.Add(childMesh);
         }
 
+        //In nearest parent with mesh
+        if (!meshes.Any())
+        {
+            var parentMesh = FindParentMesh(obj.transform);
+            if (parentMesh != null)
+                meshes.Add(parentMesh);
+        }
+
         return meshes;
+    }
+
+    private MeshRenderer FindParentMesh(Transform obj)
+    {
+        var parent = obj.parent;
+        if (parent != null)
+        {
+            var parentMesh = parent.GetComponent<MeshRenderer>();
+            if (parentMesh != null)
+                return parentMesh;
+
+            return FindParentMesh(parent);
+        }
+        return null;
     }
 }
