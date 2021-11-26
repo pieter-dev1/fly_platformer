@@ -7,7 +7,7 @@ public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
     public string currentMusic;
-    public static bool musicEnabled = true;
+    public static bool musicEnabled = false;
 
     // Start is called before the first frame update
     void Awake()

@@ -172,4 +172,9 @@ public class PlayerInput : MonoBehaviour
         Invoke("OnEnable", 0.5f);
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        print(collision.transform.name);
+    }
+
 }
