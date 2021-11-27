@@ -37,7 +37,7 @@ Material:
     - _MaxLight: 1
     - _MinLight: 0.5
     - _Offset: 0
-    - _OtlWidth: 1
+    - _OtlWidth: 2.5
     - _Segmented: 1
     - _Shininess: 0.078125
     - _ShnIntense: 0
