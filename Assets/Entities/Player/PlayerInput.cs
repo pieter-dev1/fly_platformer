@@ -32,7 +32,10 @@ public class PlayerInput : MonoBehaviour
 
         GameObject.Find("PlayerVcam").GetComponent<CinemachineInputActionProvider>().XYAxis = controls.look;
 
-        controls.move.started += _ => { comps.entityMovement.moving = true; };
+        controls.move.started += _ => {
+            comps.entityMovement.moving = true;
+            //if (comps.entityStats.grounded) { comps.audioManager.PlaySound("PlayerWalk"); } 
+        };
         controls.move.performed += ctx => comps.entityMovement.direction = ctx.ReadValue<Vector2>();
         controls.move.canceled += _ => { comps.entityMovement.CancelMovement(); };
 
@@ -57,11 +60,36 @@ public class PlayerInput : MonoBehaviour
         //Sprint/wallrun
         controls.sprint.started += _ => TriggerSprint();
         controls.sprint.canceled += _ => CancelSprint();
+
+        //To checkpoint
+        controls.toCheckpoint.started += _ => {
+            transform.position = Challenge.startPoint;
+            var meter = comps.entityStats.meter;
+            meter.FillMeter(meter.maxMeter);
+        };
+
+        //Pause
+        controls.pause.started += _ =>
+        {
+            Time.timeScale = Time.timeScale > 0 ? 0 : 1;
+            return;
+        };
+
+        //To next safepoint
+        controls.toNextPoint.started += _ =>
+        {
+            GetComponent<PlayerToNextPoint>().ToPoint(true);
+        };
+        //To previous safepoint
+        controls.toPrevPoint.started += _ =>
+        {
+            GetComponent<PlayerToNextPoint>().ToPoint(false);
+        };
     }
 
     public void TriggerSprint()
     {
-        if (comps.entityStats.meter.currMeter >= comps.entityStats.meter.usageMinimum)
+        if ((comps.entityStats.grounded || (!comps.entityStats.grounded && comps.entityJump.jumped)) && comps.entityStats.meter.currMeter >= comps.entityStats.meter.usageMinimum)
         {
             gameObject.ExecuteEffects(gameObject, false, sprintEffect);
             comps.fauxAttractor.enabled = true;
@@ -106,7 +134,7 @@ public class PlayerInput : MonoBehaviour
         else enableLookButtonsPressed--;
     }
 
-    private void OnEnable()
+    public void OnEnable()
     {
         controls.move.Enable();
         controls.enableLook.Enable();
@@ -114,9 +142,13 @@ public class PlayerInput : MonoBehaviour
         controls.look.Disable();
         controls.jump.Enable();
         controls.sprint.Enable();
+        controls.pause.Enable();
+        controls.toCheckpoint.Enable();
+        controls.toNextPoint.Enable();
+        controls.toPrevPoint.Enable();
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         controls.move.Disable();
         controls.enableLook.Disable();
@@ -124,5 +156,25 @@ public class PlayerInput : MonoBehaviour
         controls.look.Disable();
         controls.jump.Disable();
         controls.sprint.Disable();
+        controls.pause.Enable();
+        controls.toCheckpoint.Disable();
+        controls.toNextPoint.Disable();
+        controls.toPrevPoint.Disable();
     }
+
+    public void ToLastCheckpoint()
+    {
+        transform.position = Challenge.startPoint;
+        var meter = comps.entityStats.meter;
+        meter.FillMeter(meter.maxMeter);
+        
+        OnDisable();
+        Invoke("OnEnable", 0.5f);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        print(collision.transform.name);
+    }
+
 }

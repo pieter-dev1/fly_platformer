@@ -10,11 +10,12 @@ public class FauxAttractor : MonoBehaviour
     public bool onWall = false;
     [SerializeField]
     public Transform cornerDetector;
-    [SerializeField]
-    private Transform mainGround;
+    public Transform mainGround;
     [SerializeField]
     public (Transform transform, bool cubeShaped) currentSurface;
     private RaycastHit newHit;
+
+    private bool allowSurfaceSwitch = true;
 
     private void Start()
     {
@@ -31,21 +32,23 @@ public class FauxAttractor : MonoBehaviour
         var verticalRotationAxis = upAxisIndex == 0 ? 2 : upAxisIndex - 1;
         var raycastStart = pos;
         raycastStart[upAxisIndex] += 0.5f;
-        Debug.DrawRay(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, Color.red, 1f);
-        if (Physics.Raycast(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, out newHit, 1f) && (newHit.transform.gameObject != currentSurface.transform.gameObject || !comps.entityMovement.allowRot))
+        //Debug.DrawRay(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, Color.red, 1f);
+        if (allowSurfaceSwitch && Physics.Raycast(raycastStart, Quaternion.Euler(transform.right * 30) * transform.forward, out newHit, 1f) && (newHit.transform.gameObject != currentSurface.transform.gameObject || !comps.entityMovement.allowRot))
         {
-            if (newHit.transform.tag.Equals(Tags.WALL))
+            if (newHit.transform.gameObject.layer.Equals(Layers.GROUND) && newHit.transform.tag.Equals(Tags.WALL))
             {
+                print($"let u down, {newHit.transform.name}");
+                allowSurfaceSwitch = false;
                 if (comps.entityJump.jumped)
                 {
                     //Temp fix for bug where new gravity wouldnt be applied when jumping to another wall. 
                     comps.rigidbody.constraints = RigidbodyConstraints.FreezePosition;
                     comps.rigidbody.constraints &= ~RigidbodyConstraints.FreezePosition;
                 }
-                print($"{newHit.transform.name}: {newHit.normal}");
                 onWall = true;
                 currentSurface = (newHit.transform, newHit.transform.GetComponent<BoxCollider>() != null);
                 comps.entityStats.groundUp = newHit.normal;
+                StartCoroutine(ReenableSurfaceSwitch());
             }
         }
 
@@ -63,6 +66,12 @@ public class FauxAttractor : MonoBehaviour
         //        transform.rotation = Quaternion.LookRotation(rot, comps.entityStats.groundUp);
         //    }
         //}
+    }
+
+    private IEnumerator ReenableSurfaceSwitch()
+    {
+        yield return new WaitForSeconds(1);
+        allowSurfaceSwitch = true;
     }
 
     private void OnCollisionEnter(Collision collision)

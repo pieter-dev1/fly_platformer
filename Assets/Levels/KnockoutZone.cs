@@ -5,14 +5,20 @@ using UnityEngine;
 public class KnockoutZone : MonoBehaviour
 {
     public bool onlyKoWhenGrounded = false;
+    [SerializeField]
+    private GameObject allowedGround; //only used when onlyKoWhenGrounded = true
 
     private void OnTriggerEnter(Collider other)
     {
-        if ((!onlyKoWhenGrounded && other.tag == Tags.PLAYER) || (onlyKoWhenGrounded && (!other.GetComponent<FauxAttractor>().enabled || gameObject == other.GetComponent<FauxAttractor>().currentSurface.transform.gameObject)))
+        //print($"{other.name}: {((!onlyKoWhenGrounded && other.tag == Tags.PLAYER) || (other.tag == Tags.PLAYER && onlyKoWhenGrounded && (!other.GetComponent<FauxAttractor>().enabled || allowedGround == other.GetComponent<FauxAttractor>().currentSurface.transform.gameObject)))}");
+        //if ((!onlyKoWhenGrounded && other.tag == Tags.PLAYER) || (other.tag == Tags.PLAYER && onlyKoWhenGrounded && (!other.GetComponent<FauxAttractor>().enabled || gameObject == other.GetComponent<FauxAttractor>().currentSurface.transform.gameObject)))
+        //{
+        //    print("su");
+        //    other.GetComponent<PlayerInput>().ToLastCheckpoint();
+        //}
+        if((!onlyKoWhenGrounded && other.tag == Tags.PLAYER) || (onlyKoWhenGrounded && other.tag == Tags.PLAYER && other.GetComponent<EntityStats>().grounded))
         {
-            other.transform.position = Challenge.startPoint;
-            var meter = other.GetComponent<EntityComponents>().entityStats.meter;
-            meter.FillMeter(meter.maxMeter);
+            other.GetComponent<PlayerInput>().ToLastCheckpoint();
         }
     }
 }

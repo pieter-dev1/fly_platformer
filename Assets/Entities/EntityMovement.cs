@@ -113,7 +113,6 @@ public class EntityMovement : MonoBehaviour
 
         if (comps.fauxAttractor.currentSurface.cubeShaped)
         {
-            print(comps.entityStats.groundUp);
             comps.rigidbody.AddForce(comps.entityStats.groundUp * gravity);
         }
         else

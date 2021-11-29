@@ -22,8 +22,9 @@ public class EntityJump : MonoBehaviour
         var groundUp = comps.entityStats.groundUp;
         if (comps.fauxAttractor != null && comps.fauxAttractor.enabled && comps.fauxAttractor.onWall)
         {
+            var positiveNormal = comps.entityStats.upAxis.positive; //if not checked and Move properly set, player could be stuck in wall
             comps.fauxAttractor.CancelCustomGravity(false);
-            comps.entityMovement.Move(new Vector2(0.1f, 0));
+            comps.entityMovement.Move(new Vector2(positiveNormal ? 0.1f : -0.1f, 0));
             comps.entityStats.blocks.Add(Blocks.MOVE);
             comps.rigidbody.AddForce(groundUp * (jumpForce * wallJumpRatio));
         }
