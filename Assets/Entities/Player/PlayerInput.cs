@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
+    [SerializeField] private float enableStartUpTime;
     [SerializeField]
     private Controls controls;
     private EntityComponents comps;
@@ -136,6 +137,12 @@ public class PlayerInput : MonoBehaviour
 
     public void OnEnable()
     {
+        StartCoroutine(EnableInput());
+    }
+
+    private IEnumerator EnableInput()
+    {
+        yield return new WaitForSeconds(enableStartUpTime);
         controls.move.Enable();
         controls.enableLook.Enable();
         controls.axisLook.Enable();
@@ -170,11 +177,6 @@ public class PlayerInput : MonoBehaviour
         
         OnDisable();
         Invoke("OnEnable", 0.5f);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        print(collision.transform.name);
     }
 
 }
