@@ -61,7 +61,7 @@ Material:
     - _LightingEnabled: 0
     - _Lumin: 0
     - _MaxLight: 1
-    - _MinLight: 1
+    - _MinLight: 0.8
     - _Mode: 0
     - _Offset: 0
     - _OtlWidth: 1
