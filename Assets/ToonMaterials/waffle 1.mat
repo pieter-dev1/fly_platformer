@@ -63,10 +63,10 @@ Material:
     - _FresnelBrightness: 0
     - _FresnelPower: 0
     - _FresnelShadowDropoff: 0
-    - _HighIntensity: 2
+    - _HighIntensity: 1.3
     - _LightScalar: 2.2
     - _LightingEnabled: 0
-    - _LowIntensity: 1.3
+    - _LowIntensity: 0.7
     - _Lumin: 0
     - _MaxLight: 1
     - _MinLight: 1
