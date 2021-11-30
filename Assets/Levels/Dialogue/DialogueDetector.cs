@@ -7,13 +7,14 @@ using UnityEngine.UI;
 
 public class DialogueDetector : MonoBehaviour
 {
-    public static string currentDialogueObj;
+    public static DialogueDetector currentDialogueObj;
     [SerializeField] private Image dialogueSphere;
     [SerializeField] private TextMeshProUGUI textUI;
     [SerializeField] private Collider collider;
     [SerializeField] private List<Line> lines;
 
     [SerializeField] private float startUpTime;
+    [SerializeField] private float writeTime;
     private Queue<Line> linesQ;
 
     [System.Serializable]
@@ -27,20 +28,28 @@ public class DialogueDetector : MonoBehaviour
     {
         if (other.tag.Equals(Tags.PLAYER))
         {
+            if (currentDialogueObj != this && currentDialogueObj != null)
+            {
+                currentDialogueObj.StopAllCoroutines();
+                currentDialogueObj.enabled = false;
+            }
+
             collider.enabled = false;
-            currentDialogueObj = transform.name;
+            currentDialogueObj = this;
             linesQ = new Queue<Line>(lines);
-            EnableDialogueObjects(delay: startUpTime);
+            textUI.enabled = true; //for some reason text didnt appear on screen without this line
+            textUI.text = string.Empty;
+            DisableDialogue(delay: startUpTime);
             StartCoroutine(ShowNextLine(startUpTime));
         }
     }
 
-    private IEnumerator EnableDialogueObjects(bool enable = true, float delay = 0)
+    private IEnumerator DisableDialogue(float delay = 0)
     {
         yield return new WaitForSeconds(delay);
         //dialogueSphere.enabled = enable;
-        if (!enable) textUI.text = string.Empty;
-        textUI.enabled = enable;
+        textUI.text = string.Empty;
+        textUI.enabled = false;
     }
 
     private IEnumerator ShowNextLine(float showLineDelay = 0)
@@ -52,13 +61,14 @@ public class DialogueDetector : MonoBehaviour
         foreach (var letter in letters)
         {
             textUI.text += letter;
-            yield return null;
+            yield return new WaitForSeconds(writeTime);
         }
 
         //To next element or cancel dialogue
         if (!linesQ.Any())
         {
-            StartCoroutine(EnableDialogueObjects(false, currLine.delayToNext));
+            currentDialogueObj = null;
+            StartCoroutine(DisableDialogue(currLine.delayToNext));
         }
         else
         {

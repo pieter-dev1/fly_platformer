@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
-    [SerializeField] private float enableStartUpTime;
+    [SerializeField] private float enableStartUpTime; //original = 7
     [SerializeField]
     private Controls controls;
     private EntityComponents comps;
