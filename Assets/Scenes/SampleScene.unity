@@ -2974,6 +2974,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 832.121
       objectReference: {fileID: 0}
+    - target: {fileID: 23959308125829392, guid: 1730c87d1a8da71498ba75f2be14092d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0de187190af5554409b3e5d15b9ac1f6, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1730c87d1a8da71498ba75f2be14092d, type: 3}
 --- !u!4 &701504149 stripped
@@ -4023,7 +4027,7 @@ PrefabInstance:
     - target: {fileID: 2300000, guid: 23fc59362ba1e264eb5b636821ad929a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 9cec08d5175ff6942934fb9bb91f80af, type: 2}
+      objectReference: {fileID: 2100000, guid: d1cc013dcc67ea2449671f1f950552a9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23fc59362ba1e264eb5b636821ad929a, type: 3}
 --- !u!1001 &880501961
@@ -6990,7 +6994,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7788396, y: 1}
+    m_SensorSize: {x: 1.7751678, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 1
