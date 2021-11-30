@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerToNextPoint : MonoBehaviour
 {
     private List<Vector3> positions = new List<Vector3>(new[] {
+        new Vector3(2.3f, 0.47f, -56),
         new Vector3(2.3f,0.47f,-28f),
         new Vector3(2.3f, 0.47f, 10.7f),
         new Vector3(2.3f, 0.47f, 30f),
