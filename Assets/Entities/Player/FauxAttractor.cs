@@ -37,7 +37,6 @@ public class FauxAttractor : MonoBehaviour
         {
             if (newHit.transform.gameObject.layer.Equals(Layers.GROUND) && newHit.transform.tag.Equals(Tags.WALL))
             {
-                print($"let u down, {newHit.transform.name}");
                 allowSurfaceSwitch = false;
                 if (comps.entityJump.jumped)
                 {
