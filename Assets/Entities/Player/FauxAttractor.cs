@@ -87,15 +87,18 @@ public class FauxAttractor : MonoBehaviour
             }
         }
 
-        if(enabled && (collision.collider.gameObject.layer.Equals(Layers.GROUND) || collision.collider.tag.Equals(Tags.WALL)))
+        if(enabled)
         {
             var rot = Vector3.zero;
-            if (comps.entityStats.upAxis.index != MoveAxis.VERTICAL)
+            if (collision.collider.tag.Equals(Tags.WALL) && comps.entityStats.upAxis.index != MoveAxis.VERTICAL)
             {
                 rot[comps.entityStats.horAxis] = -90;
             }
+
             if (rot != Vector3.zero)
+            {
                 transform.rotation = Quaternion.LookRotation(rot, comps.entityStats.groundUp); //rotation
+            }
         }
     }
 
@@ -125,5 +128,10 @@ public class FauxAttractor : MonoBehaviour
             comps.entityStats.groundUp = EntityStats.defaultGroundUp;
         enabled = !disableAttractor;
         onWall = false;
+
+        //Resets rotation properly
+        var rot = transform.rotation;
+        rot.x = 0;
+        transform.rotation = rot;
     }
 }

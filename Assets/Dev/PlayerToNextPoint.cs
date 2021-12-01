@@ -11,7 +11,8 @@ public class PlayerToNextPoint : MonoBehaviour
         new Vector3(2.3f, 0.47f, 30f),
         new Vector3(4.7f, 0.48f, 49.5f),
         new Vector3(1.3f, 8.5f, 60f),
-        new Vector3(-3.3f, 6.7f, 78.6f)
+        new Vector3(-3.3f, 6.7f, 78.6f),
+        new Vector3(-8f, 4.7f, 114f)
     });
 
     public void ToPoint(bool nextPoint)

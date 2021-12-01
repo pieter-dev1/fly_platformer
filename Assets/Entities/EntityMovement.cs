@@ -15,6 +15,8 @@ public class EntityMovement : MonoBehaviour
     private readonly float gravity = -80;
     public bool allowRot = true;
 
+    private bool adjustedMovementNotMoving = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,11 +30,13 @@ public class EntityMovement : MonoBehaviour
 
         if (moving)
         {
+            adjustedMovementNotMoving = false;
             Move(direction);
         }
         else
         {
-            transform.rotation = Quaternion.LookRotation(transform.forward, comps.entityStats.groundUp); //rotation
+            adjustedMovementNotMoving = true;
+            transform.rotation = Quaternion.LookRotation(transform.forward, comps.entityStats.groundUp);
         }
         ApplyGravity();
     }
@@ -61,7 +65,9 @@ public class EntityMovement : MonoBehaviour
             var movement = (vector) * Time.deltaTime * (moveSpeed * comps.entityStats.moveSpeedRatio);
             if (allowRot) {
                 if (comps.fauxAttractor.currentSurface.cubeShaped)
+                {
                     transform.rotation = Quaternion.LookRotation(movement, comps.entityStats.groundUp);
+                }
                 else
                 {
                     RaycastHit hit;
@@ -72,7 +78,6 @@ public class EntityMovement : MonoBehaviour
                     {
                         if (hit.normal != comps.entityStats.groundUp)
                         {
-                            //print($"diff normal: {hit.normal}");
                             comps.entityStats.groundUp = hit.normal;
                         }
                     }
@@ -127,5 +132,6 @@ public class EntityMovement : MonoBehaviour
         moving = false;
         direction = Vector2.zero;
         comps.rigidbody.velocity = direction;
+        var forward = transform.rotation[comps.entityStats.upAxis.index];
     }
 }
