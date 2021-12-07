@@ -14,6 +14,8 @@ public class PlayerInput : MonoBehaviour
 
     public bool pressedJump = false;
 
+    private int trollIndex = -1;
+
     //Sprint/wallrun effects
     private readonly EffectExecution sprintEffect = new EffectExecution(Effect.MOVESPEED, 30);
 
@@ -175,7 +177,11 @@ public class PlayerInput : MonoBehaviour
         transform.position = Challenge.startPoint;
         var meter = comps.entityStats.meter;
         meter.FillMeter(meter.maxMeter);
-        
+
+        foreach (var dialogueTriggerCol in Challenge.checkpointDialogueTriggers)
+        {
+            dialogueTriggerCol.enabled = true;
+        }
     }
 
 }

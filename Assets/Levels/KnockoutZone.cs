@@ -19,8 +19,7 @@ public class KnockoutZone : MonoBehaviour
         if((!onlyKoWhenGrounded && other.tag == Tags.PLAYER) || (onlyKoWhenGrounded && other.tag == Tags.PLAYER && other.GetComponent<EntityStats>().grounded))
         {
             other.GetComponent<PlayerInput>().ToLastCheckpoint();
-
-
+            
             //Resets rotation properly
             other.transform.rotation = Quaternion.Euler(Vector3.zero);
         }

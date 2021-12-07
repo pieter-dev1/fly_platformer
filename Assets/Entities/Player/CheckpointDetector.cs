@@ -9,12 +9,15 @@ public class CheckpointDetector : MonoBehaviour
 
     [SerializeField]
     private string optionalMusicPlayed;
+    [SerializeField]
+    private List<Collider> dialogueTriggerCols;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag.Equals(Tags.PLAYER))
         {
             Challenge.startPoint = transform.position;
+            Challenge.checkpointDialogueTriggers = dialogueTriggerCols;
             var meter = other.GetComponent<EntityComponents>().entityStats.meter;
             meter.FillMeter(meter.maxMeter);
 
