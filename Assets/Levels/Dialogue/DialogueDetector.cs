@@ -26,8 +26,10 @@ public class DialogueDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        print($"{transform.name}: {other.name}, {other.tag}");
         if (other.tag.Equals(Tags.PLAYER))
         {
+            print($"wtf: {other.name}");
             if (currentDialogueObj != this && currentDialogueObj != null)
             {
                 currentDialogueObj.StopAllCoroutines();
