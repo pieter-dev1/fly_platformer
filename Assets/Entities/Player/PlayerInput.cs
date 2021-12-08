@@ -47,7 +47,6 @@ public class PlayerInput : MonoBehaviour
         //where you would stop falling a brief moment even though you were already falling from your jump.
         controls.jump.performed += _ => {
             if (comps.entityStats.grounded || comps.fauxAttractor.onWall) {
-                print("input");
                 comps.entityStats.lastSurface = (comps.fauxAttractor.currentSurface.transform, comps.entityStats.groundUp);
                 comps.entityJump.Jump(); pressedJump = true;
             }
