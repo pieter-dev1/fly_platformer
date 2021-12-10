@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WebEraser : MonoBehaviour
 {
@@ -14,11 +15,26 @@ public class WebEraser : MonoBehaviour
     private SpriteRenderer[] webs;
     [SerializeField]
     private GameObject[] surfaces;
+    [SerializeField]
+    private Image eraserMeter;
 
     [SerializeField]
     private float revertTime = 1;
 
+    private bool activated = false;
+    private float maxWidth = 70;
     private FauxAttractor playerAttractor;
+
+    //private void Update()
+    //{
+    //    print(activated);
+    //    if (activated)
+    //    {
+    //        var scale = eraserMeter.transform.localScale;
+    //        scale.x += maxWidth / revertTime * Time.deltaTime;
+    //        eraserMeter.transform.localScale = scale;
+    //    }
+    //}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -31,6 +47,9 @@ public class WebEraser : MonoBehaviour
             {
                 surface.layer = Layers.GROUND;
             }
+
+            eraserMeter.enabled = true;
+            eraserMeter.color = mesh.sharedMaterial.GetColor("_EmissionColor");
 
             StartCoroutine(PutWebsBack());
         }
@@ -46,6 +65,8 @@ public class WebEraser : MonoBehaviour
         {
             web.enabled = enable;
         }
+
+        //activated = !enable;
     }
 
     private IEnumerator PutWebsBack()

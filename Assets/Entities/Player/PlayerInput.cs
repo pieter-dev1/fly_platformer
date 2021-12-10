@@ -173,6 +173,8 @@ public class PlayerInput : MonoBehaviour
 
     public void ToLastCheckpoint()
     {
+        comps.fauxAttractor.CompletelyCancelWallRun();
+        comps.entityStats.meter.allowUsage = true;
         transform.position = Challenge.startPoint;
         var meter = comps.entityStats.meter;
         meter.FillMeter(meter.maxMeter);

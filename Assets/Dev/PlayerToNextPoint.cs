@@ -4,16 +4,31 @@ using UnityEngine;
 
 public class PlayerToNextPoint : MonoBehaviour
 {
+    [SerializeField]
+    private int startPointIndex = 0;
     private List<Vector3> positions = new List<Vector3>(new[] {
+        //Start
         new Vector3(2.3f, 0.47f, -56),
+        //Waffle-Yogurt
         new Vector3(2.3f,0.47f,-28f),
+        //Before Books
         new Vector3(2.3f, 0.47f, 10.7f),
+        //After Books
         new Vector3(2.3f, 0.47f, 30f),
-        new Vector3(4.7f, 0.48f, 49.5f),
-        new Vector3(1.3f, 8.5f, 60f),
+        //Table
+        new Vector3(4.7f, -0.8f, 49.5f),
+        //Shelf
+        new Vector3(1.3f, 8.5f, 65f),
+        //Closet Book
         new Vector3(-3.3f, 6.7f, 78.6f),
+        //End area
         new Vector3(-8f, 4.7f, 114f)
     });
+
+    private void Start()
+    {
+        transform.position = positions[startPointIndex];
+    }
 
     public void ToPoint(bool nextPoint)
     {

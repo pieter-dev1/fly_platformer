@@ -42,8 +42,10 @@ public class EntityMovement : MonoBehaviour
 
 
         //Fix flying bug
-        if(!comps.entityJump.jumped && comps.entityStats.grounded && Mathf.Abs(transform.rotation[comps.entityStats.verAxis]) == 90)
+        //print($"{comps.entityJump.jumped}, {comps.entityStats.grounded}, {Mathf.Abs(transform.rotation[comps.entityStats.horAxis])}, {transform.rotation}");
+        if (comps.entityJump.jumped && !comps.entityStats.grounded && Mathf.Abs(transform.rotation[comps.entityStats.horAxis]) >= 0.7)
         {
+            var forward = transform.forward;
             comps.fauxAttractor.CompletelyCancelWallRun();
         }
     }
