@@ -38,10 +38,14 @@ public class DialogueDetector : MonoBehaviour
                 currentDialogueObj.enabled = false;
             }
 
-            other.attachedRigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
-            playerCol.GetComponent<PlayerInput>().OnDisable();
+            if (Settings.GetBoolSetting(Settings.FreezeOnDialogue))
+            {
+                other.attachedRigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+                playerCol.GetComponent<PlayerInput>().OnDisable();
+                globalPlayerFrozen = true;
+            }
 
-            globalPlayerFrozen = true;
+
             collider.enabled = false;
             currentDialogueObj = this;
             linesQ = new Queue<Line>(lines);

@@ -105,6 +105,7 @@ public class PlayerInput : MonoBehaviour
             }
 
             comps.animator.SetBool("sprinting", true);
+            comps.audioManager.PlaySound("FlyWalk");
         }
     }
 
@@ -119,6 +120,12 @@ public class PlayerInput : MonoBehaviour
         };
         comps.entityStats.meter.resetThisUsage = false;
         comps.animator.SetBool("sprinting", false);
+        StopSprintSound();
+    }
+
+    public void StopSprintSound()
+    {
+        comps.audioManager.StopSound("FlyWalk");
     }
 
     public void CancelJump()

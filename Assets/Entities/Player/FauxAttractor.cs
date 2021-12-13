@@ -133,5 +133,6 @@ public class FauxAttractor : MonoBehaviour
         var rot = transform.rotation;
         rot.x = 0;
         transform.rotation = rot;
+        comps.playerInput.StopSprintSound();
     }
 }
