@@ -16,6 +16,9 @@ public class DialogueDetector : MonoBehaviour
     [SerializeField] private float startUpTime;
     [SerializeField] private float writeTime;
     private Queue<Line> linesQ;
+    private bool localPlayerFrozen = false;
+    private bool globalPlayerFrozen = false;
+    private Collider playerCol;
 
     [System.Serializable]
     public struct Line
@@ -28,11 +31,20 @@ public class DialogueDetector : MonoBehaviour
     {
         if (other.tag.Equals(Tags.PLAYER))
         {
+            playerCol = other;
             if (currentDialogueObj != this && currentDialogueObj != null)
             {
                 currentDialogueObj.StopAllCoroutines();
                 currentDialogueObj.enabled = false;
             }
+
+            if (Settings.GetBoolSetting(Settings.FreezeOnDialogue))
+            {
+                other.attachedRigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+                playerCol.GetComponent<PlayerInput>().OnDisable();
+                globalPlayerFrozen = true;
+            }
+
 
             collider.enabled = false;
             currentDialogueObj = this;
@@ -55,6 +67,14 @@ public class DialogueDetector : MonoBehaviour
     private IEnumerator ShowNextLine(float showLineDelay = 0)
     {
         yield return new WaitForSeconds(showLineDelay);
+        if (globalPlayerFrozen && localPlayerFrozen)
+        {
+            playerCol.attachedRigidbody.constraints = ~RigidbodyConstraints.FreezePosition;
+            playerCol.GetComponent<PlayerInput>().OnEnable();
+            globalPlayerFrozen = false;
+        }
+        localPlayerFrozen = true;
+
         var currLine = linesQ.Dequeue();
         textUI.text = string.Empty;
         var letters = currLine.txt.ToCharArray();
@@ -67,6 +87,12 @@ public class DialogueDetector : MonoBehaviour
         //To next element or cancel dialogue
         if (!linesQ.Any())
         {
+            if (globalPlayerFrozen && localPlayerFrozen)
+            {
+                playerCol.attachedRigidbody.constraints = ~RigidbodyConstraints.FreezePosition;
+                playerCol.GetComponent<PlayerInput>().OnEnable();
+                globalPlayerFrozen = false;
+            }
             currentDialogueObj = null;
             StartCoroutine(DisableDialogue(currLine.delayToNext));
         }

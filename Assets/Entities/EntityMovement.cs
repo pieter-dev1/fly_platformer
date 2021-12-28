@@ -39,6 +39,15 @@ public class EntityMovement : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(transform.forward, comps.entityStats.groundUp);
         }
         ApplyGravity();
+
+
+        //Fix flying bug
+        //print($"{comps.entityJump.jumped}, {comps.entityStats.grounded}, {Mathf.Abs(transform.rotation[comps.entityStats.horAxis])}, {transform.rotation}");
+        if (comps.entityJump.jumped && !comps.entityStats.grounded && Mathf.Abs(transform.rotation[comps.entityStats.horAxis]) >= 0.7)
+        {
+            var forward = transform.forward;
+            comps.fauxAttractor.CompletelyCancelWallRun();
+        }
     }
 
     public void Move(Vector2 direction)

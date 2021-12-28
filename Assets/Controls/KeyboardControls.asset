@@ -212,3 +212,35 @@ MonoBehaviour:
       m_Groups: 
       m_Action: To Prev Point
       m_Flags: 0
+  troll1:
+    m_Name: Troll 1
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e5ef1bc6-df89-4bfb-81df-aaa49a7173f2
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: a14eb356-6e45-4a45-998f-995262099845
+      m_Path: <Keyboard>/2
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Troll 1
+      m_Flags: 0
+  troll2:
+    m_Name: Troll 2
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a503e3c3-2a70-4010-a5cf-676b7ee51e38
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 5b098e7b-e002-4e68-b63f-2f3885857c2f
+      m_Path: <Keyboard>/3
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Troll 2
+      m_Flags: 0

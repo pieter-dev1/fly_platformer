@@ -14,6 +14,8 @@ public class PlayerInput : MonoBehaviour
 
     public bool pressedJump = false;
 
+    private int trollIndex = -1;
+
     //Sprint/wallrun effects
     private readonly EffectExecution sprintEffect = new EffectExecution(Effect.MOVESPEED, 30);
 
@@ -35,17 +37,17 @@ public class PlayerInput : MonoBehaviour
 
         controls.move.started += _ => {
             comps.entityMovement.moving = true;
+            comps.audioManager.PlaySound("FlyWalkStrijk");
             //if (comps.entityStats.grounded) { comps.audioManager.PlaySound("PlayerWalk"); } 
         };
         controls.move.performed += ctx => comps.entityMovement.direction = ctx.ReadValue<Vector2>();
-        controls.move.canceled += _ => { comps.entityMovement.CancelMovement(); };
+        controls.move.canceled += _ => { comps.entityMovement.CancelMovement(); comps.audioManager.StopSound("FlyWalkStrijk"); };
 
         //pressedJump tracks if the jump input has succesfully come through. With this it can be forced that the jumpcancel input only comes through on the actual jump
         //(the first time you press the button). This means every press (jumpcancel) after (whem youre in the air) will not come through, which prevents a bug
         //where you would stop falling a brief moment even though you were already falling from your jump.
         controls.jump.performed += _ => {
             if (comps.entityStats.grounded || comps.fauxAttractor.onWall) {
-                print("input");
                 comps.entityStats.lastSurface = (comps.fauxAttractor.currentSurface.transform, comps.entityStats.groundUp);
                 comps.entityJump.Jump(); pressedJump = true;
             }
@@ -93,6 +95,9 @@ public class PlayerInput : MonoBehaviour
     {
         if ((comps.entityStats.grounded || (!comps.entityStats.grounded && comps.entityJump.jumped)) && comps.entityStats.meter.currMeter >= comps.entityStats.meter.usageMinimum)
         {
+            if (!comps.entityJump.jumped)
+                comps.audioManager.PlaySound("WoundedBuzz");
+
             gameObject.ExecuteEffects(gameObject, false, sprintEffect);
             comps.fauxAttractor.enabled = true;
             comps.entityStats.meter.currUsing = true;
@@ -104,6 +109,8 @@ public class PlayerInput : MonoBehaviour
             }
 
             comps.animator.SetBool("sprinting", true);
+            comps.audioManager.StopSound("FlyWalkStrijk");
+            comps.audioManager.PlaySound("FlySprint");
         }
     }
 
@@ -118,6 +125,14 @@ public class PlayerInput : MonoBehaviour
         };
         comps.entityStats.meter.resetThisUsage = false;
         comps.animator.SetBool("sprinting", false);
+        StopSprintSound();
+    }
+
+    public void StopSprintSound()
+    {
+        comps.audioManager.StopSound("FlySprint");
+        if(comps.entityMovement.moving)
+            comps.audioManager.PlaySound("FlyWalkStrijk");
     }
 
     public void CancelJump()
@@ -172,10 +187,16 @@ public class PlayerInput : MonoBehaviour
 
     public void ToLastCheckpoint()
     {
+        comps.fauxAttractor.CompletelyCancelWallRun();
+        comps.entityStats.meter.allowUsage = true;
         transform.position = Challenge.startPoint;
         var meter = comps.entityStats.meter;
         meter.FillMeter(meter.maxMeter);
-        
+
+        foreach (var dialogueTriggerCol in Challenge.checkpointDialogueTriggers)
+        {
+            dialogueTriggerCol.enabled = true;
+        }
     }
 
 }
