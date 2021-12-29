@@ -51,6 +51,7 @@ public class DialogueDetector : MonoBehaviour
             linesQ = new Queue<Line>(lines);
             textUI.enabled = true; //for some reason text didnt appear on screen without this line
             textUI.text = string.Empty;
+            dialogueSphere.enabled = true;
             DisableDialogue(delay: startUpTime);
             StartCoroutine(ShowNextLine(startUpTime));
         }
@@ -59,7 +60,7 @@ public class DialogueDetector : MonoBehaviour
     private IEnumerator DisableDialogue(float delay = 0)
     {
         yield return new WaitForSeconds(delay);
-        //dialogueSphere.enabled = enable;
+        dialogueSphere.enabled = false;
         textUI.text = string.Empty;
         textUI.enabled = false;
     }
