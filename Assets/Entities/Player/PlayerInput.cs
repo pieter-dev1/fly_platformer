@@ -75,7 +75,10 @@ public class PlayerInput : MonoBehaviour
         //Pause
         controls.pause.started += _ =>
         {
-            Time.timeScale = Time.timeScale > 0 ? 0 : 1;
+            if (Time.timeScale > 0)
+                comps.playerPause.Pause();
+            else
+                comps.playerPause.Unpause();
             return;
         };
 

@@ -51,7 +51,6 @@ public class AudioManager : MonoBehaviour
             var musicSound = PlaySound(musicName);
             if (playRandomAfter && possibleRandomSounds.Any())
             {
-                print(musicSound.clip.length);
                 StartCoroutine(PlayRandomNextSound(possibleRandomSounds, musicSound.clip.length + 2, true, true));
             }
         }

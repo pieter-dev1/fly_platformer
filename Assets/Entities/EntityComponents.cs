@@ -12,6 +12,7 @@ public class EntityComponents : MonoBehaviour
 
     //Player
     public PlayerInput playerInput;
+    public PlayerPause playerPause;
     public Transform feet;
 
     //Components
