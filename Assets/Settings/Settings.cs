@@ -8,6 +8,10 @@ public class Settings : MonoBehaviour
     public readonly static string FreezeOnDialogue = "FreezeOnDialogue";
     public readonly static string Volume = "Volume";
 
+    public static bool DialogueEnabled = false;
+    public static bool MusicEnabled = false;
+
+
     [SerializeField] private Slider volumeSlider;
 
     public void Start()

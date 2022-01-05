@@ -1,6 +1,7 @@
 ﻿using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,6 +16,7 @@ public class PlayerInput : MonoBehaviour
     public bool pressedJump = false;
 
     private int trollIndex = -1;
+    
 
     //Sprint/wallrun effects
     private readonly EffectExecution sprintEffect = new EffectExecution(Effect.MOVESPEED, 30);
@@ -65,9 +67,42 @@ public class PlayerInput : MonoBehaviour
         controls.sprint.started += _ => TriggerSprint();
         controls.sprint.canceled += _ => CancelSprint();
 
+        //To next dialogue line
+        controls.nextDialogueLine.started += _ =>
+        {
+            var dialogue = DialogueDetector.currDialogue;
+            if (dialogue != null)
+            {
+                if (!dialogue.currLineWritten)
+                {
+                    dialogue.FillLine();
+                }
+                else if (dialogue.linesQ.Any())
+                {
+                    StartCoroutine(dialogue.ShowNextLine());
+                }
+                else
+                {
+                    dialogue.DisableDialogue();
+                }
+            }
+        };
+
+        //Skip to next checkpoint
+        controls.skip.started += _ =>
+        {
+            if (KnockoutZone.skipAvailable)
+            {
+                transform.position = Challenge.checkpoints[Challenge.progress].position;
+                KnockoutZone.timesKod = 0;
+                GameObject.Find("SkipIcon").SetActive(false);
+                KnockoutZone.skipAvailable = false;
+            }
+        };
+
         //To checkpoint
         controls.toCheckpoint.started += _ => {
-            transform.position = Challenge.startPoint;
+            transform.position = Challenge.respawnPoint;
             var meter = comps.entityStats.meter;
             meter.FillMeter(meter.maxMeter);
         };
@@ -82,12 +117,12 @@ public class PlayerInput : MonoBehaviour
             return;
         };
 
-        //To next safepoint
+        //To next safepoint (dev)
         controls.toNextPoint.started += _ =>
         {
             GetComponent<PlayerToNextPoint>().ToPoint(true);
         };
-        //To previous safepoint
+        //To previous safepoint (dev)
         controls.toPrevPoint.started += _ =>
         {
             GetComponent<PlayerToNextPoint>().ToPoint(false);
@@ -168,7 +203,9 @@ public class PlayerInput : MonoBehaviour
         controls.look.Disable();
         controls.jump.Enable();
         controls.sprint.Enable();
+        controls.nextDialogueLine.Enable();
         controls.pause.Enable();
+        controls.skip.Enable();
         controls.toCheckpoint.Enable();
         controls.toNextPoint.Enable();
         controls.toPrevPoint.Enable();
@@ -182,7 +219,9 @@ public class PlayerInput : MonoBehaviour
         controls.look.Disable();
         controls.jump.Disable();
         controls.sprint.Disable();
-        controls.pause.Enable();
+        controls.nextDialogueLine.Disable();
+        controls.pause.Disable();
+        controls.skip.Disable();
         controls.toCheckpoint.Disable();
         controls.toNextPoint.Disable();
         controls.toPrevPoint.Disable();
@@ -192,7 +231,7 @@ public class PlayerInput : MonoBehaviour
     {
         comps.fauxAttractor.CompletelyCancelWallRun();
         comps.entityStats.meter.allowUsage = true;
-        transform.position = Challenge.startPoint;
+        transform.position = Challenge.respawnPoint;
         var meter = comps.entityStats.meter;
         meter.FillMeter(meter.maxMeter);
 

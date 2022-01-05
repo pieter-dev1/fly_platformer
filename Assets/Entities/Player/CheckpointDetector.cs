@@ -16,8 +16,9 @@ public class CheckpointDetector : MonoBehaviour
     {
         if (other.tag.Equals(Tags.PLAYER))
         {
-            Challenge.startPoint = transform.position;
+            Challenge.respawnPoint = transform.position;
             Challenge.checkpointDialogueTriggers = dialogueTriggerCols;
+            Challenge.progress++;
             var meter = other.GetComponent<EntityComponents>().entityStats.meter;
             meter.FillMeter(meter.maxMeter);
 

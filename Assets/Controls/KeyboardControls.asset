@@ -148,6 +148,22 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Sprint
       m_Flags: 0
+  nextDialogueLine:
+    m_Name: Next Dialogue Line
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: fd6975a7-0f73-4651-8e64-f7a1c9196bff
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: e0454838-2ba1-46cc-b666-e6d688517105
+      m_Path: <Keyboard>/q
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Next Dialogue Line
+      m_Flags: 0
   pause:
     m_Name: Pause
     m_Type: 0
@@ -163,6 +179,22 @@ MonoBehaviour:
       m_Processors: 
       m_Groups: 
       m_Action: Pause
+      m_Flags: 0
+  skip:
+    m_Name: Skip
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 5832c283-e85a-4202-81ef-90d29cc13663
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 76895d85-df4e-4951-9e41-4f5b3b753954
+      m_Path: <Keyboard>/t
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Skip
       m_Flags: 0
   toCheckpoint:
     m_Name: To Checkpoint
@@ -212,35 +244,19 @@ MonoBehaviour:
       m_Groups: 
       m_Action: To Prev Point
       m_Flags: 0
-  troll1:
-    m_Name: Troll 1
+  toggleHelpObjects:
+    m_Name: Toggle Help Objects
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: e5ef1bc6-df89-4bfb-81df-aaa49a7173f2
+    m_Id: 7fa68f9a-1f84-43ed-ae71-0d96ab8b5c85
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: a14eb356-6e45-4a45-998f-995262099845
+      m_Id: b689acde-fdbd-4d7f-b5a5-6afa59b90382
       m_Path: <Keyboard>/2
       m_Interactions: 
       m_Processors: 
       m_Groups: 
-      m_Action: Troll 1
-      m_Flags: 0
-  troll2:
-    m_Name: Troll 2
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: a503e3c3-2a70-4010-a5cf-676b7ee51e38
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 5b098e7b-e002-4e68-b63f-2f3885857c2f
-      m_Path: <Keyboard>/3
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Troll 2
+      m_Action: Toggle Help Objects
       m_Flags: 0

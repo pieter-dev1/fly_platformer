@@ -8,7 +8,6 @@ public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
     public string currentMusic;
-    public static bool musicEnabled = true;
     [SerializeField]
     private List<RandomSound> StartTableRandomMusic;
 
@@ -45,7 +44,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMusic(string musicName, bool playRandomAfter = false, List<RandomSound> possibleRandomSounds = null)
     {
-        if (musicEnabled)
+        if (Settings.MusicEnabled)
         {
             currentMusic = musicName;
             var musicSound = PlaySound(musicName);

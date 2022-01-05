@@ -12,8 +12,11 @@ public class Controls : ScriptableObject
     public InputAction look;
     public InputAction jump;
     public InputAction sprint;
+    public InputAction nextDialogueLine;
     public InputAction pause;
+    public InputAction skip;
     public InputAction toCheckpoint;
     public InputAction toNextPoint;
     public InputAction toPrevPoint;
+    public InputAction toggleHelpObjects;
 }

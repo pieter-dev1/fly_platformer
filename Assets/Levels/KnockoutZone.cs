@@ -8,6 +8,11 @@ public class KnockoutZone : MonoBehaviour
     [SerializeField]
     private GameObject allowedGround; //only used when onlyKoWhenGrounded = true
 
+    public static int timesKod = 0;
+    public static bool skipAvailable;
+    private static bool wasSkipAvailableBefore = false;
+    [SerializeField] private GameObject skipIcon;
+
     private void OnTriggerEnter(Collider other)
     {
         //print($"{other.name}: {((!onlyKoWhenGrounded && other.tag == Tags.PLAYER) || (other.tag == Tags.PLAYER && onlyKoWhenGrounded && (!other.GetComponent<FauxAttractor>().enabled || allowedGround == other.GetComponent<FauxAttractor>().currentSurface.transform.gameObject)))}");
@@ -18,10 +23,24 @@ public class KnockoutZone : MonoBehaviour
         //}
         if((!onlyKoWhenGrounded && other.tag == Tags.PLAYER) || (onlyKoWhenGrounded && other.tag == Tags.PLAYER && other.GetComponent<EntityStats>().grounded))
         {
+            timesKod++;
+            if (timesKod == 10)
+            {
+                skipIcon.SetActive(true);
+                skipAvailable = true;
+                if (!wasSkipAvailableBefore)
+                {
+                    GameObject.Find("SkipDialogue").GetComponent<DialogueDetector>().TriggerDialogue();
+                    wasSkipAvailableBefore = true;
+                }
+            }
+
             other.GetComponent<PlayerInput>().ToLastCheckpoint();
             
             //Resets rotation properly
             other.transform.rotation = Quaternion.Euler(Vector3.zero);
+
+
         }
     }
 }
