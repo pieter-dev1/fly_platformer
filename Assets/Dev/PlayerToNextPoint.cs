@@ -21,6 +21,8 @@ public class PlayerToNextPoint : MonoBehaviour
         new Vector3(1.3f, 8.5f, 65f),
         //Closet Book
         new Vector3(-3.3f, 6.7f, 78.6f),
+        //Cat House
+        new Vector3(14f,-2.25f,73.73f),
         //End area
         new Vector3(-8f, 4.7f, 114f)
     });
