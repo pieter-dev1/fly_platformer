@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class CheckpointDetector : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class CheckpointDetector : MonoBehaviour
     private string optionalMusicPlayed;
     [SerializeField]
     private List<Collider> dialogueTriggerCols;
+    [SerializeField] private GameObject tpButton;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,6 +21,8 @@ public class CheckpointDetector : MonoBehaviour
             Challenge.respawnPoint = transform.position;
             Challenge.checkpointDialogueTriggers = dialogueTriggerCols;
             Challenge.progress++;
+            other.GetComponent<PlayerPause>().AddTpButton(tpButton);
+
             var meter = other.GetComponent<EntityComponents>().entityStats.meter;
             meter.FillMeter(meter.maxMeter);
 

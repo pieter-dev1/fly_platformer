@@ -241,4 +241,24 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
+    public void ToCheckpoint(int checkpointIndex)
+    {
+        if (checkpointIndex <= Challenge.progress)
+        {
+            comps.fauxAttractor.CompletelyCancelWallRun();
+            comps.entityStats.meter.allowUsage = true;
+            transform.position = Challenge.checkpoints[checkpointIndex].transform.position;
+            var meter = comps.entityStats.meter;
+            meter.FillMeter(meter.maxMeter);
+
+            if (checkpointIndex == Challenge.progress)
+            {
+                foreach (var dialogueTriggerCol in Challenge.checkpointDialogueTriggers)
+                {
+                    dialogueTriggerCol.enabled = true;
+                }
+            }
+        }
+    }
+
 }
