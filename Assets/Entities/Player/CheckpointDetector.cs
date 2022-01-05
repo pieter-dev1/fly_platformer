@@ -12,7 +12,7 @@ public class CheckpointDetector : MonoBehaviour
     private string optionalMusicPlayed;
     [SerializeField]
     private List<Collider> dialogueTriggerCols;
-    [SerializeField] private GameObject tpButton;
+    public GameObject tpButton;
 
     private void OnTriggerEnter(Collider other)
     {

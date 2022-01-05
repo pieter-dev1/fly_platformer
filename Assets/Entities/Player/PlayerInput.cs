@@ -93,10 +93,7 @@ public class PlayerInput : MonoBehaviour
         {
             if (KnockoutZone.skipAvailable)
             {
-                transform.position = Challenge.checkpoints[Challenge.progress].position;
-                KnockoutZone.timesKod = 0;
-                GameObject.Find("SkipIcon").SetActive(false);
-                KnockoutZone.skipAvailable = false;
+                SkipToCheckpoint();
             }
         };
 
@@ -227,6 +224,15 @@ public class PlayerInput : MonoBehaviour
         controls.toPrevPoint.Disable();
     }
 
+    private void SkipToCheckpoint()
+    {
+        var checkpoint = Challenge.checkpoints[Challenge.progress + 1];
+        transform.position = checkpoint.position;
+        KnockoutZone.timesKod = 0;
+        GameObject.Find("SkipIcon").SetActive(false);
+        KnockoutZone.skipAvailable = false;
+    }
+
     public void ToLastCheckpoint()
     {
         comps.fauxAttractor.CompletelyCancelWallRun();
@@ -243,22 +249,26 @@ public class PlayerInput : MonoBehaviour
 
     public void ToCheckpoint(int checkpointIndex)
     {
-        if (checkpointIndex <= Challenge.progress)
-        {
-            comps.fauxAttractor.CompletelyCancelWallRun();
-            comps.entityStats.meter.allowUsage = true;
-            transform.position = Challenge.checkpoints[checkpointIndex].transform.position;
-            var meter = comps.entityStats.meter;
-            meter.FillMeter(meter.maxMeter);
+        comps.fauxAttractor.CompletelyCancelWallRun();
+        comps.entityStats.meter.allowUsage = true;
+        transform.position = Challenge.checkpoints[checkpointIndex].transform.position;
+        var meter = comps.entityStats.meter;
+        meter.FillMeter(meter.maxMeter);
 
-            if (checkpointIndex == Challenge.progress)
-            {
-                foreach (var dialogueTriggerCol in Challenge.checkpointDialogueTriggers)
-                {
-                    dialogueTriggerCol.enabled = true;
-                }
-            }
+        if (checkpointIndex > Challenge.progress)
+        {
+            KnockoutZone.timesKod = 0;
+            GameObject.Find("SkipIcon").SetActive(false);
+            KnockoutZone.skipAvailable = false;
         }
+
+        //if (checkpointIndex >= Challenge.progress)
+        //{
+        //    foreach (var dialogueTriggerCol in Challenge.checkpointDialogueTriggers)
+        //    {
+        //        dialogueTriggerCol.enabled = true;
+        //    }
+        //}
     }
 
 }

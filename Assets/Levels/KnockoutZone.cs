@@ -24,15 +24,17 @@ public class KnockoutZone : MonoBehaviour
         if((!onlyKoWhenGrounded && other.tag == Tags.PLAYER) || (onlyKoWhenGrounded && other.tag == Tags.PLAYER && other.GetComponent<EntityStats>().grounded))
         {
             timesKod++;
-            if (timesKod == 10)
+            if (timesKod == 1 && Challenge.progress < Challenge.checkpoints.Length)
             {
                 skipIcon.SetActive(true);
                 skipAvailable = true;
-                if (!wasSkipAvailableBefore)
-                {
-                    GameObject.Find("SkipDialogue").GetComponent<DialogueDetector>().TriggerDialogue();
-                    wasSkipAvailableBefore = true;
-                }
+                var nextCheckpoint = Challenge.checkpoints[Challenge.progress + 1].GetComponent<CheckpointDetector>();
+                other.GetComponent<PlayerPause>().AddTpButton(nextCheckpoint.tpButton, false);
+                //if (!wasSkipAvailableBefore)
+                //{
+                //    GameObject.Find("SkipDialogue").GetComponent<DialogueDetector>().TriggerDialogue();
+                //    wasSkipAvailableBefore = true;
+                //}
             }
 
             other.GetComponent<PlayerInput>().ToLastCheckpoint();

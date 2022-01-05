@@ -8,7 +8,9 @@ public class PlayerPause : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject teleporterBaseUi;
-    private List<GameObject> activeTpButtons = new List<GameObject>();
+    private List<(GameObject btn, bool checkpointReached)> activeTpButtons = new List<(GameObject btn, bool checkpointReached)>();
+
+    private Color skipColor = new Color(1, 0.97f, 0.63f);
 
     public void Pause()
     {
@@ -34,12 +36,25 @@ public class PlayerPause : MonoBehaviour
         if (activeTpButtons.Any())
         {
             teleporterBaseUi.SetActive(enabled);
-            activeTpButtons.ForEach(x => x.SetActive(enabled));
+            activeTpButtons.ForEach(x => {
+                if (!x.checkpointReached)
+                    x.btn.GetComponent<Image>().color = skipColor;
+                else
+                    x.btn.GetComponent<Image>().color = Color.white;
+                x.btn.SetActive(enabled);
+                }
+            );
         }
     }
 
-    public void AddTpButton(GameObject btn)
+    public void AddTpButton(GameObject btn, bool checkpointReached = true)
     {
-        activeTpButtons.Add(btn);
+        var foundElementIndex = activeTpButtons.FindIndex(x => x.btn == btn);
+        if (foundElementIndex >= 0)
+        {
+            activeTpButtons[foundElementIndex] = (btn, checkpointReached);
+        }
+        else
+            activeTpButtons.Add((btn, checkpointReached));
     }
 }
