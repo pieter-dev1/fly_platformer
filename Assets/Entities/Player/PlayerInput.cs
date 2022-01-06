@@ -241,9 +241,11 @@ public class PlayerInput : MonoBehaviour
         var meter = comps.entityStats.meter;
         meter.FillMeter(meter.maxMeter);
 
-        foreach (var dialogueTriggerCol in Challenge.checkpointDialogueTriggers)
-        {
-            dialogueTriggerCol.enabled = true;
+        if (Challenge.checkpointDialogueTriggers.Any()) {
+            foreach (var dialogueTriggerCol in Challenge.checkpointDialogueTriggers)
+            {
+                dialogueTriggerCol.enabled = true;
+            }
         }
     }
 
@@ -262,13 +264,14 @@ public class PlayerInput : MonoBehaviour
             KnockoutZone.skipAvailable = false;
         }
 
-        //if (checkpointIndex >= Challenge.progress)
-        //{
-        //    foreach (var dialogueTriggerCol in Challenge.checkpointDialogueTriggers)
-        //    {
-        //        dialogueTriggerCol.enabled = true;
-        //    }
-        //}
+        if (checkpointIndex >= Challenge.progress)
+        {
+            Challenge.checkpointDialogueTriggers = Challenge.checkpoints[checkpointIndex].GetComponent<CheckpointDetector>().dialogueTriggerCols;
+            foreach (var dialogueTriggerCol in Challenge.checkpointDialogueTriggers)
+            {
+                dialogueTriggerCol.enabled = true;
+            }
+        }
     }
 
 }
