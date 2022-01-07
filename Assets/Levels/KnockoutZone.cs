@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class KnockoutZone : MonoBehaviour
 {
@@ -24,11 +25,11 @@ public class KnockoutZone : MonoBehaviour
         if((!onlyKoWhenGrounded && other.tag == Tags.PLAYER) || (onlyKoWhenGrounded && other.tag == Tags.PLAYER && other.GetComponent<EntityStats>().grounded))
         {
             timesKod++;
-            if (timesKod == 1 && Challenge.progress < Challenge.checkpoints.Length)
+            if (timesKod == 10 && Challenge.lastReachedCheckpoint < Challenge.checkpoints.Count)
             {
                 skipIcon.SetActive(true);
                 skipAvailable = true;
-                var nextCheckpoint = Challenge.checkpoints[Challenge.progress + 1].GetComponent<CheckpointDetector>();
+                var nextCheckpoint = Challenge.checkpoints[Challenge.lastReachedCheckpoint + 1].GetComponent<CheckpointDetector>();
                 other.GetComponent<PlayerPause>().AddTpButton(nextCheckpoint.tpButton, false);
                 //if (!wasSkipAvailableBefore)
                 //{
@@ -37,12 +38,20 @@ public class KnockoutZone : MonoBehaviour
                 //}
             }
 
-            other.GetComponent<PlayerInput>().ToLastCheckpoint();
-            
+            var playerPos = other.transform.position;
+            if (playerPos.z >= Challenge.respawnPoint.z) {
+                other.GetComponent<PlayerInput>().ToLastCheckpoint();
+            }
+            else
+            {
+                var nearestCheckpoint = Challenge.checkpoints.OrderBy(x => Vector3.Distance(playerPos, x.position)).First();
+                var checkpointIndex = Challenge.checkpoints.IndexOf(nearestCheckpoint);
+                var allowedIndex = checkpointIndex < Challenge.lastReachedCheckpoint ? checkpointIndex : Challenge.lastReachedCheckpoint;
+                other.GetComponent<PlayerInput>().ToCheckpoint(allowedIndex);
+            }
+               
             //Resets rotation properly
             other.transform.rotation = Quaternion.Euler(Vector3.zero);
-
-
         }
     }
 }

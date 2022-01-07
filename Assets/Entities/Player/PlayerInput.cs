@@ -203,7 +203,7 @@ public class PlayerInput : MonoBehaviour
         controls.nextDialogueLine.Enable();
         controls.pause.Enable();
         controls.skip.Enable();
-        controls.toCheckpoint.Enable();
+        //controls.toCheckpoint.Enable();
         controls.toNextPoint.Enable();
         controls.toPrevPoint.Enable();
     }
@@ -219,14 +219,14 @@ public class PlayerInput : MonoBehaviour
         controls.nextDialogueLine.Disable();
         controls.pause.Disable();
         controls.skip.Disable();
-        controls.toCheckpoint.Disable();
+        //controls.toCheckpoint.Disable();
         controls.toNextPoint.Disable();
         controls.toPrevPoint.Disable();
     }
 
     private void SkipToCheckpoint()
     {
-        var checkpoint = Challenge.checkpoints[Challenge.progress + 1];
+        var checkpoint = Challenge.checkpoints[Challenge.lastReachedCheckpoint + 1];
         transform.position = checkpoint.position;
         KnockoutZone.timesKod = 0;
         GameObject.Find("SkipIcon").SetActive(false);
@@ -257,14 +257,14 @@ public class PlayerInput : MonoBehaviour
         var meter = comps.entityStats.meter;
         meter.FillMeter(meter.maxMeter);
 
-        if (checkpointIndex > Challenge.progress)
+        if (checkpointIndex > Challenge.lastReachedCheckpoint)
         {
             KnockoutZone.timesKod = 0;
             GameObject.Find("SkipIcon").SetActive(false);
             KnockoutZone.skipAvailable = false;
         }
 
-        if (checkpointIndex >= Challenge.progress)
+        if (checkpointIndex >= Challenge.lastReachedCheckpoint)
         {
             Challenge.checkpointDialogueTriggers = Challenge.checkpoints[checkpointIndex].GetComponent<CheckpointDetector>().dialogueTriggerCols;
             foreach (var dialogueTriggerCol in Challenge.checkpointDialogueTriggers)

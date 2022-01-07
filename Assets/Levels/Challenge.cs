@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Challenge : MonoBehaviour
@@ -8,8 +9,8 @@ public class Challenge : MonoBehaviour
     public static List<Collider> checkpointDialogueTriggers;
 
     [SerializeField] private Transform[] _checkpoints;
-    public static Transform[] checkpoints { get; private set; }
-    public static int progress = 0;
+    public static List<Transform> checkpoints { get; private set; }
+    public static int lastReachedCheckpoint = 0;
 
     public readonly static List<Vector3> positions = new List<Vector3>(new[] {
         //Start
@@ -34,6 +35,6 @@ public class Challenge : MonoBehaviour
 
     private void Awake()
     {
-        checkpoints = _checkpoints;
+        checkpoints = _checkpoints.ToList();
     }
 }
