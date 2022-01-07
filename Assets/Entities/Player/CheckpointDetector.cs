@@ -20,6 +20,7 @@ public class CheckpointDetector : MonoBehaviour
             Challenge.respawnPoint = transform.position;
             Challenge.checkpointDialogueTriggers = dialogueTriggerCols;
             Challenge.lastReachedCheckpoint++;
+            PlayerPrefs.SetInt("lastReachedCheckpoint", Challenge.lastReachedCheckpoint);
             other.GetComponent<PlayerPause>().AddTpButton(tpButton);
 
             var meter = other.GetComponent<EntityComponents>().entityStats.meter;

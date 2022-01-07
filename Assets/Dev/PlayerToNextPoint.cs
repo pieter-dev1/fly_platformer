@@ -11,7 +11,13 @@ public class PlayerToNextPoint : MonoBehaviour
     private void Start()
     {
         positions = Challenge.positions;
-        transform.position = positions[startPointIndex];
+        if (startPointIndex > 0)
+            transform.position = positions[startPointIndex];
+        else if (Settings.ResetPosOnStart)
+            transform.position = positions[0];
+        else
+            transform.position = Challenge.checkpoints[Challenge.lastReachedCheckpoint].position;
+
     }
 
     public void ToPoint(bool nextPoint)

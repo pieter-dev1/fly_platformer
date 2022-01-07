@@ -10,6 +10,7 @@ public class Settings : MonoBehaviour
 
     public static bool DialogueEnabled = true;
     public static bool MusicEnabled = false;
+    public static bool ResetPosOnStart = true;
 
 
     [SerializeField] private Slider volumeSlider;

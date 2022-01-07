@@ -36,5 +36,7 @@ public class Challenge : MonoBehaviour
     private void Awake()
     {
         checkpoints = _checkpoints.ToList();
+        if(PlayerPrefs.HasKey("lastReachedCheckpoint"))
+            lastReachedCheckpoint = PlayerPrefs.GetInt("lastReachedCheckpoint"); //player gets tped to lastReachedCheckpoint at start in PlayerToNextPoint
     }
 }
