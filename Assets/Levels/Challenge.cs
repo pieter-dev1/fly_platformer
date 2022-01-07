@@ -35,8 +35,25 @@ public class Challenge : MonoBehaviour
 
     private void Awake()
     {
+        //For resetting saved checkpoint
+        //PlayerPrefs.SetInt("lastReachedCheckpoint", 0);
+
         checkpoints = _checkpoints.ToList();
-        if(PlayerPrefs.HasKey("lastReachedCheckpoint"))
+        if (PlayerPrefs.HasKey("lastReachedCheckpoint"))
+        {
             lastReachedCheckpoint = PlayerPrefs.GetInt("lastReachedCheckpoint"); //player gets tped to lastReachedCheckpoint at start in PlayerToNextPoint
+            var player = GameObject.Find("Player");
+            for (int i = 0; i <= lastReachedCheckpoint; i++)
+            {
+                var checkpointDetector = checkpoints[i].GetComponent<CheckpointDetector>();
+                if (checkpointDetector != null)
+                {
+                    var tpButton = checkpointDetector.tpButton;
+                    if (tpButton != null)
+                        player.GetComponent<PlayerPause>().AddTpButton(tpButton);
+                }
+                checkpoints[i].gameObject.SetActive(false);
+            }
+        }
     }
 }

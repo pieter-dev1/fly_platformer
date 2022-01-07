@@ -63,7 +63,6 @@ public class DialogueDetector : MonoBehaviour
 
         collider.enabled = false;
         linesQ = new Queue<Line>(lines);
-        print(linesQ.Count);
         textUI.enabled = true; //for some reason text didnt appear on screen without this line
         textUI.text = string.Empty;
         textUI.fontSize = fontSize;

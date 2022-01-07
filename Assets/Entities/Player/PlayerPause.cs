@@ -12,6 +12,11 @@ public class PlayerPause : MonoBehaviour
 
     private Color skipColor = new Color(1, 0.97f, 0.63f);
 
+    private void Start()
+    {
+
+    }
+
     public void Pause()
     {
         Time.timeScale = 0;
@@ -32,7 +37,6 @@ public class PlayerPause : MonoBehaviour
     public void TogglePauseMenu(bool enabled)
     {
         pauseMenu.SetActive(enabled);
-        print(activeTpButtons.Count);
         if (activeTpButtons.Any())
         {
             teleporterBaseUi.SetActive(enabled);
@@ -56,5 +60,10 @@ public class PlayerPause : MonoBehaviour
         }
         else
             activeTpButtons.Add((btn, checkpointReached));
+    }
+
+    public List<(GameObject btn, bool checkpointReached)> GetTpButtons()
+    {
+        return activeTpButtons;
     }
 }
