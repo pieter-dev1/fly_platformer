@@ -8,15 +8,23 @@ public class Settings : MonoBehaviour
     public readonly static string FreezeOnDialogue = "FreezeOnDialogue";
     public readonly static string Volume = "Volume";
 
+    public static bool DevRun = true;
     public static bool DialogueEnabled = true;
-    public static bool MusicEnabled = false;
+    public static bool MusicEnabled = true;
     public static bool ResetPosOnStart = false;
 
 
     [SerializeField] private Slider volumeSlider;
 
-    public void Start()
+    public void Awake()
     {
+        if (DevRun)
+        {
+            DialogueEnabled = false;
+            MusicEnabled = false;
+            ResetPosOnStart = true;
+        }
+
         SetBoolSetting(FreezeOnDialogue, false);
         if (PlayerPrefs.HasKey(Volume))
             volumeSlider.value = GetFloatSetting(Volume);

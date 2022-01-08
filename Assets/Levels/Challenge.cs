@@ -42,17 +42,20 @@ public class Challenge : MonoBehaviour
         if (PlayerPrefs.HasKey("lastReachedCheckpoint"))
         {
             lastReachedCheckpoint = PlayerPrefs.GetInt("lastReachedCheckpoint"); //player gets tped to lastReachedCheckpoint at start in PlayerToNextPoint
-            var player = GameObject.Find("Player");
-            for (int i = 0; i <= lastReachedCheckpoint; i++)
+            if (!Settings.ResetPosOnStart)
             {
-                var checkpointDetector = checkpoints[i].GetComponent<CheckpointDetector>();
-                if (checkpointDetector != null)
+                var player = GameObject.Find("Player");
+                for (int i = 0; i <= lastReachedCheckpoint; i++)
                 {
-                    var tpButton = checkpointDetector.tpButton;
-                    if (tpButton != null)
-                        player.GetComponent<PlayerPause>().AddTpButton(tpButton);
+                    var checkpointDetector = checkpoints[i].GetComponent<CheckpointDetector>();
+                    if (checkpointDetector != null)
+                    {
+                        var tpButton = checkpointDetector.tpButton;
+                        if (tpButton != null)
+                            player.GetComponent<PlayerPause>().AddTpButton(tpButton);
+                    }
+                    checkpoints[i].gameObject.SetActive(false);
                 }
-                checkpoints[i].gameObject.SetActive(false);
             }
         }
     }
