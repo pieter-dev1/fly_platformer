@@ -30,7 +30,7 @@ public class Settings : MonoBehaviour
             volumeSlider.value = GetFloatSetting(Volume);
         else
             SetFloatSetting(Volume, volumeSlider.value);
-
+        AudioListener.volume = 3;
     }
 
     public void ChangeVolume()
